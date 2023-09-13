@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Catamaran:wght@100;200;300;400;500;600;700;800;900&display=swap');
 
 * {
@@ -10,13 +11,17 @@
 :root {
     --primary: #475be8;
     --secondray: #d9ddf9;
+
     --white: #fbfbfb;
     --black: #1a1d1f;
     --grey: #E4E4E4;
+
     --text: #11142d;
     --text-sec: #808191;
+
     --background: #f2f2f2;
     --hover: #F7F7F7;
+    --shadow: rgba(54, 54 54, .3);
 }
 
 body {
@@ -41,6 +46,11 @@ input {
     justify-content: center;
     align-items: center;
     flex-direction: row;
+    flex-wrap: nowrap;
+}
+
+.flex.wrap {
+    flex-wrap: wrap;
 }
 
 .flex.gap {
@@ -59,6 +69,10 @@ input {
     justify-content: space-between;
 }
 
+.flex.j-start {
+    justify-content: flex-start;
+}
+
 .flex.items-start {
     align-items: flex-start;
 }
@@ -72,8 +86,69 @@ input {
 }
 
 .btn {
-    background-color: var(--primary);
     border-radius: 8px;
     padding: 4px 14px;
+    color: var(--text);
+}
+
+.btn:hover {
+    background-color: var(--hover);
+}
+
+.btn.pri {
+    background-color: var(--primary);
     color: var(--white);
+}
+
+header,
+nav {
+    background-color: var(--white);
+    padding: 1.4em 2em;
+    box-shadow: 0 2px 24px var(--shadow);
+}
+
+header .logo {
+    font-family: 'Pacifico', cursive;
+    font-size: 2em;
+    line-height: .8em;
+    color: var(--primary);
+}
+
+header .profile .name {
+    color: var(--text);
+    font-size: 1.2em;
+    font-weight: 500;
+    line-height: .8em;
+}
+
+header .profile .email {
+    color: var(--text-sec);
+    font-size: .8em;
+}
+
+header .profile {
+    margin: 5px 0 -5px;
+}
+
+header .profile img {
+    width: 45px;
+    border-radius: 50%;
+    margin: -5px 0 5px;
+}
+
+main {
+    display: grid;
+    grid-template-columns: 280px calc(100vw - 280px);
+}
+
+nav {
+    height: 100%;
+}
+
+nav .link {
+    text-decoration: none;
+    padding: 14px;
+    color: var(--text-sec);
+    gap: 0.5em;
+    font-size: 1em;
 }

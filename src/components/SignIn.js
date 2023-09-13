@@ -21,8 +21,9 @@ const Signup = ({ setOldUser }) => {
         signInWithEmailAndPassword(auth, user.email, user.password)
             .then(userInfo => {
                 localStorage.setItem('userToken', JSON.stringify(userInfo.user.accessToken));
-                setData(prev => ({ ...prev, currentUser: userInfo }));
-            });
+                setData(prev => ({ ...prev, currentUser: userInfo.user }));
+            })
+            .catch(error => console.error(error));;
     }
 
     return (
@@ -54,7 +55,7 @@ const Signup = ({ setOldUser }) => {
                 </div>
 
                 <div className='flex col items-stretch w-full submit'>
-                    <button className="btn submit" onClick={(e) => handlesubmit(e)}>Sign In</button>
+                    <button className="btn pri submit" onClick={(e) => handlesubmit(e)}>Sign In</button>
                 </div>
 
                 <div className='change'>

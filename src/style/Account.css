@@ -49,3 +49,20 @@ form input {
 form .submit {
     margin: .8em 0 -.2em;
 }
+
+form .avatars {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+}
+
+form .avatars img {
+    max-width: 100%;
+    border: 2px solid var(--grey);
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+form .avatars .select {
+    border-color: var(--primary);
+}

@@ -14,7 +14,7 @@ export const AppContext = createContext();
 
 const App = () => {
     const [data, setData] = useState({
-        currentUser: getAuth().currentUser,
+        currentUser: getAuth().currentUser?.user,
     });
 
     return (
