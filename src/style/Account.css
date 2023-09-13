@@ -1,0 +1,51 @@
+.account {
+    width: 100vw;
+    height: 100vh;
+}
+
+.account section {
+    background-color: var(--white);
+    border-radius: 8px;
+    padding: 4em 1em;
+    width: min(420px, 100%);
+}
+
+section h1 {
+    color: var(--text);
+    font-weight: 700;
+    font-size: 2.2em;
+    line-height: 1em;
+}
+
+section p {
+    color: var(--text-sec);
+}
+
+section form {
+    width: min(280px, 100%);
+}
+
+form label {
+    color: var(--text);
+    font-size: .9em;
+}
+
+form input {
+    border: 1px solid var(--grey);
+    border-radius: 8px;
+    padding: 4px 8px;
+}
+
+:is(.forget, .change) button {
+    background-color: inherit;
+    color: var(--primary);
+    margin: 0 .4em;
+}
+
+:is(.forget, .change) button:hover {
+    text-decoration: underline;
+}
+
+form .submit {
+    margin: .8em 0 -.2em;
+}

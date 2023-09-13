@@ -12,8 +12,68 @@
     --secondray: #d9ddf9;
     --white: #fbfbfb;
     --black: #1a1d1f;
+    --grey: #E4E4E4;
     --text: #11142d;
     --text-sec: #808191;
     --background: #f2f2f2;
     --hover: #F7F7F7;
+}
+
+body {
+    background-color: var(--background);
+}
+
+button {
+    border: none;
+    cursor: pointer;
+}
+
+input {
+    outline: none;
+}
+
+.w-full {
+    width: 100%;
+}
+
+.flex {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+}
+
+.flex.gap {
+    gap: 1em;
+}
+
+.flex.gap2 {
+    gap: .5em;
+}
+
+.flex.col {
+    flex-direction: column;
+}
+
+.flex.j-between {
+    justify-content: space-between;
+}
+
+.flex.items-start {
+    align-items: flex-start;
+}
+
+.flex.items-end {
+    align-items: flex-end;
+}
+
+.flex.items-stretch {
+    align-items: stretch;
+}
+
+.btn {
+    background-color: var(--primary);
+    border-radius: 8px;
+    padding: 4px 14px;
+    color: var(--white);
 }
