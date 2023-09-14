@@ -10,7 +10,6 @@
 
 :root {
     --primary: #475be8;
-    --secondray: #d9ddf9;
 
     --white: #fbfbfb;
     --black: #1a1d1f;
@@ -22,6 +21,10 @@
     --background: #f2f2f2;
     --hover: #F7F7F7;
     --shadow: rgba(54, 54 54, .3);
+
+    --green: #83c788;
+    --yellow: #ffcf73;
+    --red: #F45252;
 }
 
 body {
@@ -33,8 +36,30 @@ button {
     cursor: pointer;
 }
 
-input {
+form label {
+    color: var(--text);
+    font-size: .9em;
+}
+
+form :where(input, textarea, select) {
+    border: 1px solid var(--grey);
+    border-radius: 8px;
+    padding: 4px 8px;
     outline: none;
+    resize: none;
+}
+
+form :where(input, textarea, select):focus {
+    border-color: var(--primary);
+}
+
+section {
+    padding: 1.4em 2em;
+}
+
+section .heading {
+    font-size: 1.6em;
+    font-weight: 600;
 }
 
 .w-full {
@@ -73,6 +98,10 @@ input {
     justify-content: flex-start;
 }
 
+.flex.j-end {
+    justify-content: flex-end;
+}
+
 .flex.items-start {
     align-items: flex-start;
 }
@@ -89,6 +118,7 @@ input {
     border-radius: 8px;
     padding: 4px 14px;
     color: var(--text);
+    white-space: nowrap;
 }
 
 .btn:hover {
@@ -105,13 +135,6 @@ nav {
     background-color: var(--white);
     padding: 1.4em 2em;
     box-shadow: 0 2px 24px var(--shadow);
-}
-
-header .logo {
-    font-family: 'Pacifico', cursive;
-    font-size: 2em;
-    line-height: .8em;
-    color: var(--primary);
 }
 
 header .profile .name {
@@ -142,13 +165,20 @@ main {
 }
 
 nav {
-    height: 100%;
+    height: calc(100vh - 2.8em);
+}
+
+nav .logo {
+    font-family: 'Pacifico', cursive;
+    font-size: 2em;
+    color: var(--primary);
 }
 
 nav .link {
     text-decoration: none;
-    padding: 14px;
+    padding: 10px 14px;
     color: var(--text-sec);
-    gap: 0.5em;
+    gap: 0.6em;
     font-size: 1em;
+    overflow: hidden;
 }

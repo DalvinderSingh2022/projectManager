@@ -1,21 +1,25 @@
 import React, { useContext } from 'react'
 import { AppContext } from '../App';
+import { Navigate } from 'react-router-dom';
 
 const Topbar = () => {
-    const { data } = useContext(AppContext);
+    const { currentUser } = useContext(AppContext);
 
+    if (!currentUser) {
+        return <Navigate to='/login' />;
+    }
     return (
-        <header className='flex j-between'>
-            <div className="logo">Tasker</div>
+        <header className='flex j-end'>
             <div className="profile flex gap2">
-                <img src={data?.currentUser?.photoURL} alt={data?.currentUser?.displayName} />
+                <img src={currentUser.user.photoURL} alt={currentUser.user.displayName} />
                 <div className=" flex col items-start">
-                    <span className="name">{data?.currentUser?.displayName}</span>
-                    <span className="email">{data?.currentUser?.email}</span>
+                    <span className="name">{currentUser.user.displayName}</span>
+                    <span className="email">{currentUser.user.email}</span>
                 </div>
             </div>
         </header>
     )
+
 }
 
 export default Topbar;

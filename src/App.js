@@ -1,27 +1,34 @@
-import React, { createContext, useState } from 'react';
+import React, { createContext, useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
+import Login from './pages/Login';
+import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import Layout from './components/Layout';
-import Account from '../src/pages/Account';
 
 import '../src/style/index.css';
-import '../src/style/Account.css';
 
-import { getAuth } from 'firebase/auth';
+import { onAuthStateChanged } from 'firebase/auth';
+import { auth } from './firebase';
 
 export const AppContext = createContext();
 
 const App = () => {
-    const [data, setData] = useState({
-        currentUser: getAuth().currentUser?.user,
-    });
+    const [currentUser, setcurrentUser] = useState(null);
+
+    useEffect(() => {
+        const database = onAuthStateChanged(auth, user => {
+            setcurrentUser(user);
+        });
+        database();
+    }, [])
 
     return (
-        <AppContext.Provider value={{ data, setData }}>
+        <AppContext.Provider value={{ currentUser, setcurrentUser }}>
             <BrowserRouter>
                 <Routes>
-                    <Route path='/account' element={<Account />} />
+                    <Route path='/login' element={<Login />} />
+                    <Route path='/register' element={<Register />} />
                     <Route path='/' element={<Layout />}>
                         <Route index element={<Dashboard />} />
                     </Route>

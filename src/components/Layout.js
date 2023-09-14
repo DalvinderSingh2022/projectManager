@@ -5,13 +5,13 @@ import Sidebar from './Sidebar';
 
 const Layout = () => {
     return (
-        <>
-            <Topbar />
-            <main>
-                <Sidebar />
+        <main>
+            <Sidebar />
+            <article>
+                <Topbar />
                 <Outlet />
-            </main>
-        </>
+            </article>
+        </main>
     )
 }
 

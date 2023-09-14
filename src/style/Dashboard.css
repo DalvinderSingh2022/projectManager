@@ -1,0 +1,80 @@
+.statistics {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    padding: 2em 2em 0;
+    gap: 1em;
+    background-color: var(--background);
+}
+
+.statistics .box {
+    color: var(--white);
+    font-weight: 600;
+    background-color: var(--green);
+    padding: 1em 1.2em;
+    border-radius: 16px;
+    min-height: 90px;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px;
+}
+
+.box:first-child {
+    background-color: var(--primary);
+}
+
+.box:last-child {
+    background-color: var(--yellow);
+}
+
+.box .stat {
+    color: var(--background);
+    font-size: 2em;
+}
+
+.container {
+    display: grid;
+    grid-template-columns: 70% 30%;
+    gap: 1em;
+    padding: 1em 2em;
+    width: calc(100% - 5em);
+}
+
+section {
+    background-color: var(--white);
+    padding: 1em 2em 2em;
+    border-radius: 10px;
+    width: calc(100% - 4em);
+    box-shadow: var(--shadow) 0px 1px 0px, var(--shadow) 0px 0px 8px;
+}
+
+section form label {
+    font-size: 1.1em;
+}
+
+section form :where(input, textarea, select) {
+    font-size: 1em;
+}
+
+.tasks .task {
+    color: var(--text-sec);
+    padding: 4px 12px;
+    border-bottom: 2px solid var(--background);
+    font-size: .8em;
+}
+
+.tasks .task:hover {
+    color: var(--text);
+    background-color: var(--hover);
+    border-radius: 6px;
+    border: none;
+}
+
+.task .title {
+    color: var(--text);
+    font-size: 1.4em;
+    white-space: nowrap;
+    margin-bottom: -0.4em;
+}
+
+.user img {
+    width: 45px;
+    border-radius: 50%;
+}

@@ -25,17 +25,6 @@ section form {
     width: min(280px, 100%);
 }
 
-form label {
-    color: var(--text);
-    font-size: .9em;
-}
-
-form input {
-    border: 1px solid var(--grey);
-    border-radius: 8px;
-    padding: 4px 8px;
-}
-
 :is(.forget, .change) button {
     background-color: inherit;
     color: var(--primary);
