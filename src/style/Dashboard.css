@@ -12,7 +12,7 @@
     background-color: var(--primary);
     padding: 1em 1.2em;
     border-radius: 16px;
-    min-height: 125px;
+    min-height: 120px;
     box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px;
 }
 
@@ -55,18 +55,22 @@ section form :where(input, textarea, select) {
     font-size: 1em;
 }
 
-.tasks .task {
+.container .tasks {
+    padding: 0;
+}
+
+.container .tasks .task {
     color: var(--text-sec);
     padding: 4px 12px;
     border-bottom: 2px solid var(--background);
     font-size: .8em;
 }
 
-.tasks .task:hover {
+.container .tasks .task:hover {
     color: var(--text);
     background-color: var(--hover);
     border-radius: 6px;
-    border: none;
+    border-color: var(--hover);
 }
 
 .task .title {

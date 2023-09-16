@@ -13,12 +13,14 @@ const Dashboard = () => {
             const dbTasks = [];
             const querySnapshot = await getDocs(collection(db, "tasks"));
             querySnapshot.forEach(task => {
-                dbTasks.push(task.data());
+                if (task.data().uid.includes(currentUser.user.uid)) {
+                    dbTasks.push(task.data());
+                }
             });
             setTasks(dbTasks);
         }
         database();
-    }, [])
+    }, [currentUser])
 
     return (
         <>
@@ -43,17 +45,20 @@ const Dashboard = () => {
 
             <div className="container">
                 <section className='flex col gap2 items-start'>
-                    <div className="heading">Add task</div>
+                    <div className="heading">Create Task</div>
                     <Edittask />
                 </section>
                 <section className='flex col j-start items-stretch gap2'>
                     <div className="heading">Tasks</div>
-                    <div className="flex col tasks items-stretch">
+                    <div className="flex col tasks items-stretch j-start">
                         {tasks && tasks.map(task => {
                             return (
-                                <div className="task flex col items-start" key={task.uid}>
-                                    <span className="title">{task.title}</span>
-                                    <div className="due">{task.duedate}</div>
+                                <div className="task flex j-between" key={task.uid}>
+                                    <div>
+                                        <span className="title">{task.title}</span>
+                                        <div className="due">{task.duedate}</div>
+                                    </div>
+                                    <span className="status" style={{ backgroundColor: `${task.status === 'completed' ? `var(--green)` : `var(--yellow)`}` }}>{task.status}</span>
                                 </div>);
                         })}
                     </div>

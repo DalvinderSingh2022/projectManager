@@ -26,7 +26,7 @@ const User = ({ displayName, photoURL, uid }) => {
             </div>
             <div className="flex col items-start j-start">
                 <span className="name">{displayName}</span>
-                <span className="tasks">Tasks: {tasks}</span>
+                <span className="taskscount">Tasks: {tasks}</span>
             </div>
         </div>
     )

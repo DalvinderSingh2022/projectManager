@@ -5,12 +5,14 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import Users from './pages/Users';
+import Tasks from './pages/Tasks';
 import Layout from './components/Layout';
 
 import '../src/style/index.css';
 import '../src/style/Account.css';
 import '../src/style/Dashboard.css';
 import '../src/style/Users.css';
+import '../src/style/Tasks.css';
 
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from './firebase';
@@ -36,6 +38,7 @@ const App = () => {
                     <Route path='/' element={<Layout />}>
                         <Route index element={<Dashboard />} />
                         <Route path='users' element={<Users />} />
+                        <Route path='tasks' element={<Tasks />} />
                     </Route>
                 </Routes>
             </BrowserRouter>

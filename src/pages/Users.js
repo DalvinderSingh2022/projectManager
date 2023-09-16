@@ -25,8 +25,8 @@ const Users = () => {
     }, [value]);
 
     return (
-        <div className="users">
-            <form className="search flex j-start gap2 items-stretch" onSubmit={e => e.preventDefault()}>
+        <aside className='users'>
+            <form className="filters flex j-start gap2 items-stretch" onSubmit={e => e.preventDefault()}>
                 <input
                     type="text"
                     name="search"
@@ -41,7 +41,7 @@ const Users = () => {
             <section className='flex gap wrap'>
                 {users.map(user => <User {...user} key={user.uid} />)}
             </section>
-        </div>
+        </aside>
     )
 }
 
