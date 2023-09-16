@@ -9,15 +9,19 @@
 .statistics .box {
     color: var(--white);
     font-weight: 600;
-    background-color: var(--green);
+    background-color: var(--primary);
     padding: 1em 1.2em;
     border-radius: 16px;
-    min-height: 90px;
+    min-height: 125px;
     box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px;
 }
 
-.box:first-child {
-    background-color: var(--primary);
+.box:nth-child(2) {
+    background-color: var(--red);
+}
+
+.box:nth-child(3) {
+    background-color: var(--green);
 }
 
 .box:last-child {
@@ -34,14 +38,12 @@
     grid-template-columns: 70% 30%;
     gap: 1em;
     padding: 1em 2em;
-    width: calc(100% - 5em);
 }
 
 section {
     background-color: var(--white);
     padding: 1em 2em 2em;
     border-radius: 10px;
-    width: calc(100% - 4em);
     box-shadow: var(--shadow) 0px 1px 0px, var(--shadow) 0px 0px 8px;
 }
 
@@ -77,4 +79,10 @@ section form :where(input, textarea, select) {
 .user img {
     width: 45px;
     border-radius: 50%;
+}
+
+@media screen and (max-width:1280px) {
+    .container {
+        grid-template-columns: 1fr;
+    }
 }

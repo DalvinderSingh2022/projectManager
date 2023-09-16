@@ -6,10 +6,13 @@ const Topbar = () => {
     const { currentUser } = useContext(AppContext);
 
     if (!currentUser) {
-        return <Navigate to='/login' />;
+        return <Navigate to='/login' />
     }
     return (
         <header className='flex j-end'>
+            <button className='btn round home pri flex' onClick={() => document.querySelector("main").classList.toggle('close')}>
+                <span class="material-symbols-outlined">drag_handle</span>
+            </button>
             <div className="profile flex gap2">
                 <img src={currentUser.user.photoURL} alt={currentUser.user.displayName} />
                 <div className=" flex col items-start">

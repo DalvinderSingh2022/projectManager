@@ -4,7 +4,6 @@ import { AppContext } from '../App';
 import { auth, db } from '../firebase';
 import { useNavigate, Link } from 'react-router-dom';
 import { doc, setDoc } from "firebase/firestore";
-import '../style/Account.css';
 
 const SignIn = () => {
     const navigate = useNavigate();
@@ -14,7 +13,7 @@ const SignIn = () => {
         email: null,
         password: null,
         photoURL: null,
-        uid: null
+        uid: null,
     });
 
     const handlechange = (e) => {
@@ -30,7 +29,6 @@ const SignIn = () => {
                 user.uid = userInfo.user.uid;
                 updateProfile(auth.currentUser, { displayName: user.displayName, photoURL: user.photoURL });
                 setDoc(doc(db, "users", userInfo.user.uid), { ...user });
-                setDoc(doc(db, "tasks", userInfo.user.uid), []);
                 setcurrentUser(userInfo);
                 navigate('/');
             })

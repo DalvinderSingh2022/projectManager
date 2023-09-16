@@ -1,25 +1,30 @@
-import { collection, doc, getDocs, getDoc, setDoc } from 'firebase/firestore';
-import React, { useContext, useEffect, useState } from 'react'
+import { doc, setDoc } from "firebase/firestore";
+import { collection, getDocs } from 'firebase/firestore';
+import React, { useContext, useEffect, useState } from 'react';
 import { db } from '../firebase';
 import { AppContext } from '../App';
 
-const Edittask = () => {
+const Edittask = ({ uid, title, detail, duedate, assignto, assignby, status }) => {
     const { currentUser } = useContext(AppContext);
     const [users, setUsers] = useState([]);
     const [task, setTask] = useState({
-        uid: null,
-        title: null,
-        detail: null,
-        duedate: null,
-        assignto: null,
-        assignby: currentUser?.user.uid,
-        status: 'pending'
+        uid: uid || null,
+        title: title || null,
+        detail: detail || null,
+        duedate: duedate || null,
+        assignto: assignto || null,
+        assignby: assignby || currentUser?.user.uid,
+        status: status || 'pending'
     });
 
     const handlechange = (e) => {
         const name = e.target.name;
         const value = e.target.value;
-        setTask(prev => ({ ...prev, [name]: value }));
+        setTask(prev => ({
+            ...prev,
+            [name]: value,
+            uid: prev?.assignby + ":" + prev?.assignto + ":" + new Date()
+        }));
     }
 
     useEffect(() => {
@@ -27,30 +32,28 @@ const Edittask = () => {
             const dbUsers = [];
             const querySnapshot = await getDocs(collection(db, "users"));
             querySnapshot.forEach(user => {
-                dbUsers.push(user.data());
+                if (user.data().uid !== currentUser.user.uid) {
+                    dbUsers.push(user.data());
+                }
             });
             setUsers(dbUsers);
         }
         database();
-    }, []);
+    }, [currentUser]);
 
     const handlesubmit = async (e) => {
         e.preventDefault();
         const database = async () => {
-            const docRef = doc(db, "tasks", currentUser.user.uid);
-            const docSnap = await getDoc(docRef);
-            const oldtask = docSnap.data();
-            const updatedtasks = oldtask ? [{ ...task, uid: task.assignby + task.assignto }] : [oldtask, { ...task, uid: task.assignby + task.assignto }];
-
-            await setDoc(doc(db, "tasks", currentUser.user.uid), { tasks: updatedtasks });
+            setDoc(doc(db, "tasks", task.uid), { ...task });
         }
-        await database();
+        database();
     }
+
     return (
         <form className='flex col items-stretch gap w-full' onSubmit={e => handlesubmit(e)}>
             <div className='flex col items-stretch w-full'>
                 <label htmlFor="title">Name</label>
-                <div className="flex gap2 itmes-strech">
+                <div className="flex gap2 items-strech">
                     <input
                         className=' w-full'
                         type="text"
@@ -60,7 +63,7 @@ const Edittask = () => {
                         value={task.title || ''}
                         onChange={(e) => handlechange(e)}
                     />
-                    <button type="submit" className='btn pri material-symbols-outlined'>Add</button>
+                    <button type="submit" className='btn pri round material-symbols-outlined'>Add</button>
                 </div>
             </div>
             <div className='flex col items-stretch w-full'>

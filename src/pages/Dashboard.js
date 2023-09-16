@@ -1,30 +1,35 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Edittask from '../components/Edittask';
-import '../style/Dashboard.css';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../firebase';
+import { AppContext } from '../App';
 
 const Dashboard = () => {
     const [tasks, setTasks] = useState([]);
+    const { currentUser } = useContext(AppContext);
 
     useEffect(() => {
         const database = async () => {
             const dbTasks = [];
-            const tasksSnapshot = await getDocs(collection(db, "tasks"));
-            tasksSnapshot.forEach(task => {
-                dbTasks.push(task.data().tasks[0])
+            const querySnapshot = await getDocs(collection(db, "tasks"));
+            querySnapshot.forEach(task => {
+                dbTasks.push(task.data());
             });
             setTasks(dbTasks);
         }
         database();
-    }, []);
+    }, [])
 
     return (
         <>
             <div className='statistics'>
                 <div className="box flex col items-start">
-                    <span className="title">Total Tasks</span>
-                    <div className="stat">{tasks.length}</div>
+                    <span className="title">Assign by you</span>
+                    <div className="stat">{tasks.filter(a => a.uid.split(":")[0].includes(currentUser.user.uid)).length}</div>
+                </div>
+                <div className="box flex col items-start">
+                    <span className="title">Assign to you</span>
+                    <div className="stat">{tasks.filter(a => a.uid.split(":")[1].includes(currentUser.user.uid)).length}</div>
                 </div>
                 <div className="box flex col items-start">
                     <span className="title">Completed Tasks</span>
@@ -46,7 +51,7 @@ const Dashboard = () => {
                     <div className="flex col tasks items-stretch">
                         {tasks && tasks.map(task => {
                             return (
-                                <div className="task flex col items-start">
+                                <div className="task flex col items-start" key={task.uid}>
                                     <span className="title">{task.title}</span>
                                     <div className="due">{task.duedate}</div>
                                 </div>);

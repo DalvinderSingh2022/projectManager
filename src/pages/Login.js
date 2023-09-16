@@ -3,7 +3,6 @@ import React, { useState, useContext } from 'react';
 import { auth } from '../firebase';
 import { AppContext } from '../App';
 import { useNavigate, Link } from 'react-router-dom';
-import '../style/Account.css';
 
 const Login = () => {
     const navigate = useNavigate();

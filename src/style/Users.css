@@ -1,0 +1,45 @@
+.users {
+    padding: 1em;
+    min-height: 100%;
+}
+
+.users .search {
+    padding: 1em;
+    background-color: var(--white);
+    border-radius: 8px;
+}
+
+.search input {
+    max-width: 540px;
+    border-radius: 8px;
+    font-size: 1.1em;
+    padding: 6px 14px;
+}
+
+.search button[type='button'] {
+    padding: 4px 16px;
+    font-size: 1.1em;
+}
+
+.users section {
+    background-color: var(--hover);
+    border-radius: 0;
+}
+
+.users .user {
+    background-color: var(--white);
+    padding: 1em 1.6em;
+    border-radius: 8px;
+    width: min(215px, 100%);
+}
+
+.user .name {
+    color: var(--text);
+    font-size: 1.1em;
+    font-weight: 600;
+    line-height: 1em;
+}
+
+.user img {
+    width: 70px;
+}
