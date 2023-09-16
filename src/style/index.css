@@ -1,6 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Catamaran:wght@100;200;300;400;500;600;700;800;900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;&display=swap');
 
 * {
     margin: 0;
@@ -37,6 +36,10 @@ button {
     cursor: pointer;
 }
 
+a {
+    text-decoration: none;
+}
+
 form label {
     color: var(--text);
     font-size: .9em;
@@ -50,7 +53,7 @@ form :where(input, textarea, select) {
     resize: none;
 }
 
-form :where(input, textarea, select):focus {
+form :where(input:not(:disabled), textarea, select):focus {
     border-color: var(--primary);
 }
 
@@ -145,6 +148,20 @@ section .heading {
     font-size: 1.1em;
 }
 
+.container {
+    display: grid;
+    grid-template-columns: 70% 30%;
+    gap: 1em;
+    padding: 1em 2em;
+}
+
+.container section {
+    background-color: var(--white);
+    padding: 1em 2em 2em;
+    border-radius: 10px;
+    box-shadow: var(--shadow) 0px 1px 0px, var(--shadow) 0px 0px 8px;
+}
+
 header,
 nav {
     background-color: var(--white);
@@ -208,7 +225,7 @@ nav {
 nav .home.btn {
     position: absolute;
     right: -20px;
-    top: 2em;
+    top: 1.4em;
     padding: 0;
 }
 
@@ -226,7 +243,7 @@ nav .logo {
 
 nav .link {
     text-decoration: none;
-    padding: 10px 14px;
+    padding: 10px 18px;
     color: var(--text-sec);
     gap: 0.6em;
     font-size: 1em;

@@ -1,32 +1,23 @@
-import { collection, getDocs } from 'firebase/firestore';
-import React, { useEffect, useState } from 'react';
-import { db } from '../firebase';
+import React, { useContext, useEffect, useState } from 'react';
 import User from '../components/User';
+import { AppContext } from '../App';
 
 const Users = () => {
+    const { dbUsers } = useContext(AppContext);
     const [users, setUsers] = useState([]);
     const [value, setValue] = useState('');
 
     useEffect(() => {
-        const database = async () => {
-            const dbUsers = [];
-            const querySnapshot = await getDocs(collection(db, "users"));
-            querySnapshot.forEach(user => {
-                dbUsers.push(user.data());
-            });
-
-            setUsers(dbUsers.filter(a => {
-                const name = a?.displayName.toLowerCase().replaceAll(" ", "");
-                const search = value.toLowerCase().replaceAll(" ", "");
-                return name.includes(search);
-            }));
-        }
-        database();
-    }, [value]);
+        setUsers(dbUsers.filter(a => {
+            const name = a?.displayName.toLowerCase().replaceAll(" ", "");
+            const search = value.toLowerCase().replaceAll(" ", "");
+            return name.includes(search);
+        }));
+    }, [value, dbUsers]);
 
     return (
         <aside className='users'>
-            <form className="filters flex j-start gap2 items-stretch" onSubmit={e => e.preventDefault()}>
+            <form className="filters flex gap2 items-stretch" onSubmit={e => e.preventDefault()}>
                 <input
                     type="text"
                     name="search"
@@ -39,7 +30,7 @@ const Users = () => {
                 <button type='button' onClick={(e) => { setValue('') }} className="btn round flex gap2 material-symbols-outlined">cancel<span>clear</span></button>
             </form>
             <section className='flex gap wrap'>
-                {users.map(user => <User {...user} key={user.uid} />)}
+                {users?.length ? users.map(user => <User {...user} key={user.uid} />) : <div>Can't found {value}</div>}
             </section>
         </aside>
     )

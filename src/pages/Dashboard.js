@@ -1,26 +1,20 @@
 import React, { useContext, useEffect, useState } from 'react';
-import Edittask from '../components/Edittask';
-import { collection, getDocs } from 'firebase/firestore';
-import { db } from '../firebase';
+import Createtask from '../components/Createtask';
 import { AppContext } from '../App';
 
 const Dashboard = () => {
     const [tasks, setTasks] = useState([]);
-    const { currentUser } = useContext(AppContext);
+    const { currentUser, dbTasks } = useContext(AppContext);
 
     useEffect(() => {
-        const database = async () => {
-            const dbTasks = [];
-            const querySnapshot = await getDocs(collection(db, "tasks"));
-            querySnapshot.forEach(task => {
-                if (task.data().uid.includes(currentUser.user.uid)) {
-                    dbTasks.push(task.data());
-                }
-            });
-            setTasks(dbTasks);
-        }
-        database();
-    }, [currentUser])
+        const Tasks = [];
+        dbTasks.forEach(task => {
+            if (task.uid.includes(currentUser.user.uid)) {
+                Tasks.push(task);
+            }
+        });
+        setTasks(Tasks);
+    }, [currentUser, dbTasks]);
 
     return (
         <>
@@ -46,7 +40,7 @@ const Dashboard = () => {
             <div className="container">
                 <section className='flex col gap2 items-start'>
                     <div className="heading">Create Task</div>
-                    <Edittask />
+                    <Createtask />
                 </section>
                 <section className='flex col j-start items-stretch gap2'>
                     <div className="heading">Tasks</div>

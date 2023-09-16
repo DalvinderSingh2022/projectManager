@@ -1,23 +1,15 @@
-import { collection, getDocs } from 'firebase/firestore';
-import React, { useEffect, useRef, useState } from 'react'
-import { db } from '../firebase';
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import Task from '../components/Task';
+import { AppContext } from '../App';
 
 const Tasks = () => {
+    const { dbTasks } = useContext(AppContext);
     const [status, setStatus] = useState(null);
     const [tasks, setTasks] = useState([]);
     const btnsRef = useRef(null);
 
     useEffect(() => {
-        const database = async () => {
-            const dbTasks = [];
-            const querySnapshot = await getDocs(collection(db, "tasks"));
-            querySnapshot.forEach(task => {
-                dbTasks.push(task.data());
-            });
-            setTasks(status ? (dbTasks.filter(a => a.status === status) || []) : dbTasks)
-        }
-        database();
+        setTasks(status ? (dbTasks.filter(a => a.status === status) || []) : dbTasks);
 
         const btns = btnsRef.current.querySelectorAll('button');
         const btnclick = (btn) => {
@@ -28,7 +20,7 @@ const Tasks = () => {
         btns.forEach(btn => btn.addEventListener('click', () => btnclick(btn)))
 
         return () => btns?.forEach(btn => btn.removeEventListener('click', () => btnclick(btn)));
-    }, [status])
+    }, [status, dbTasks]);
 
 
     return (
@@ -38,8 +30,8 @@ const Tasks = () => {
                 <button className="btn round flex gap2 material-symbols-outlined" data-value={'completed'}>check_circle<span>Completed</span></button>
                 <button className="btn round flex gap2 material-symbols-outlined" data-value={'pending'}>schedule<span>Pending</span></button>
             </div>
-            <section className='flex gap wrap j-start'>
-                {tasks && tasks.map(task => <Task {...task} key={task.uid} />)}
+            <section className='flex gap wrap'>
+                {tasks?.length ? tasks.map(task => <Task {...task} key={task.uid} />) : <div>There is no {status && `${status}`} task</div>}
             </section>
         </aside>
     )

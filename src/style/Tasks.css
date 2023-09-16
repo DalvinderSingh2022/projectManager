@@ -9,9 +9,8 @@
 .tasks section .task {
     background-color: var(--white);
     border-radius: 18px;
-    padding: 1em 1.6em;
-    width: min(320px, 100%);
-    cursor: pointer;
+    padding: 1em;
+    width: min(254px, 100%);
 }
 
 .tasks .task .title {
@@ -21,14 +20,19 @@
 
 .tasks .task .detail {
     font-size: 1.1em;
-    height: 120px;
+    height: 80px;
     overflow: hidden;
 }
 
 .tasks .task .comments {
-    background-color: var(--white);
+    background-color: var(--hover);
 }
 
 .tasks .task .assign img {
     width: 40px;
+}
+
+.comments .text {
+    font-size: 1.4em;
+    color: var(--text);
 }

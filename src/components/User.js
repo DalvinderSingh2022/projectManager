@@ -1,23 +1,19 @@
-import { collection, getDocs } from 'firebase/firestore';
-import React, { useEffect, useState } from 'react'
-import { db } from '../firebase';
+import React, { useContext, useEffect, useState } from 'react'
+import { AppContext } from '../App';
 
 const User = ({ displayName, photoURL, uid }) => {
+    const { dbTasks } = useContext(AppContext)
     const [tasks, setTasks] = useState(0);
 
     useEffect(() => {
-        const database = async () => {
-            const dbTasks = [];
-            const querySnapshot = await getDocs(collection(db, "tasks"));
-            querySnapshot.forEach(task => {
-                if (task.data().uid.includes(uid)) {
-                    dbTasks.push(task.data());
-                }
-            });
-            setTasks(dbTasks.length);
-        }
-        database();
-    }, [uid])
+        const Tasks = [];
+        dbTasks.forEach(task => {
+            if (task.uid.includes(uid)) {
+                Tasks.push(task);
+            }
+        });
+        setTasks(Tasks.length);
+    }, [dbTasks, uid])
 
     return (
         <div className="user flex gap2 col items-stretch">
