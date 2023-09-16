@@ -29,6 +29,7 @@ const SignIn = () => {
                 user.uid = userInfo.user.uid;
                 updateProfile(auth.currentUser, { displayName: user.displayName, photoURL: user.photoURL });
                 setDoc(doc(db, "users", userInfo.user.uid), { ...user });
+                localStorage.setItem("taskUser", JSON.stringify(userInfo));
                 setcurrentUser(userInfo);
                 navigate('/');
             })
@@ -70,7 +71,7 @@ const SignIn = () => {
                     <div className='flex col items-stretch w-full'>
                         <label htmlFor="avatar">Avatar</label>
                         <div className="avatars w-full flex j-start wrap">
-                            {avatars.map((avatar, index) => <img onClick={(e) => handleAvatar(e)} src={avatar} alt={'avatar' + (index + 1)} key={index} />)}
+                            {avatars.map((avatar, index) => <img onClick={(e) => handleAvatar(e)} src={avatar} alt={'avatar' + (index + 1)} key={index} loading='lazy' />)}
                         </div>
                     </div>
                     <div className='flex col items-stretch w-full'>

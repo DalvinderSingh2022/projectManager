@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { memo, useContext, useEffect, useState } from 'react';
 import { AppContext } from '../App';
 import { doc, setDoc, deleteDoc } from 'firebase/firestore';
 import { db } from '../firebase';
@@ -25,7 +25,6 @@ const Createtask = ({ uid, title, detail, duedate, assignto, assignby, status, i
         e.preventDefault();
         const database = async () => {
             setDoc(doc(db, "tasks", task.uid), { ...task })
-                .then(updatedb(prev => !prev));
             handledelete();
         }
         database();
@@ -36,7 +35,7 @@ const Createtask = ({ uid, title, detail, duedate, assignto, assignby, status, i
             if (isEdit) {
                 await deleteDoc(doc(db, "tasks", uid))
                     .then(updatedb(prev => !prev));
-                navigate('/tasks');
+                setTimeout(() => navigate('/tasks'), 2000);
             }
         }
         database();
@@ -45,7 +44,7 @@ const Createtask = ({ uid, title, detail, duedate, assignto, assignby, status, i
     useEffect(() => {
         const Users = [];
         dbUsers.forEach(user => {
-            if (user.uid !== currentUser.user.uid) {
+            if (user.uid !== currentUser?.user.uid) {
                 Users.push(user);
             }
         });
@@ -58,7 +57,7 @@ const Createtask = ({ uid, title, detail, duedate, assignto, assignby, status, i
         detail: detail,
         duedate: duedate,
         assignto: assignto,
-        assignby: assignby || currentUser.user.uid,
+        assignby: assignby || currentUser?.user.uid,
         status: status || 'pending'
     }), [uid, title, detail, duedate, assignto, assignby, status, currentUser]);
 
@@ -68,7 +67,7 @@ const Createtask = ({ uid, title, detail, duedate, assignto, assignby, status, i
                 <label htmlFor="title">Name</label>
                 <div className="flex gap2 items-strech">
                     <input
-                        disabled={currentUser.user.uid !== assignby && isEdit}
+                        disabled={currentUser?.user.uid !== assignby && isEdit}
                         className=' w-full'
                         type="text"
                         id='title'
@@ -77,14 +76,14 @@ const Createtask = ({ uid, title, detail, duedate, assignto, assignby, status, i
                         value={task.title}
                         onChange={(e) => handlechange(e)}
                     />
-                    <button type="submit" className="btn pri round material-symbols-outlined">add</button>
-                    {(currentUser.user.uid === assignby && isEdit) && <button type="button" className="btn pri round material-symbols-outlined" style={{ backgroundColor: 'var(--red)' }} onClick={() => handledelete()}>Delete</button>}
+                    {(!isEdit || currentUser?.user.uid === assignby) && <button type="submit" className="btn pri round material-symbols-outlined">add</button>}
+                    {(currentUser?.user.uid === assignby && isEdit) && <button type="button" className="btn pri round material-symbols-outlined" style={{ backgroundColor: 'var(--red)' }} onClick={() => handledelete()}>Delete</button>}
                 </div>
             </div>
             <div className='flex col items-stretch w-full'>
                 <label htmlFor="detail">Detail</label>
                 <textarea
-                    disabled={currentUser.user.uid !== assignby && isEdit}
+                    disabled={currentUser?.user.uid !== assignby && isEdit}
                     rows={6}
                     type="text"
                     id='detail'
@@ -95,7 +94,7 @@ const Createtask = ({ uid, title, detail, duedate, assignto, assignby, status, i
                 />
             </div>
             <div className="flex gap items-stretch">
-                {currentUser.user.uid === assignby &&
+                {currentUser?.user.uid === assignby &&
                     <div className='flex col items-stretch'>
                         <label htmlFor="assign">Status</label>
                         <select
@@ -107,11 +106,10 @@ const Createtask = ({ uid, title, detail, duedate, assignto, assignby, status, i
                             <option value="pending">Pending</option>
                         </select>
                     </div>}
-
                 <div className='flex col items-stretch '>
                     <label htmlFor="duedate">Due Date</label>
                     <input
-                        disabled={currentUser.user.uid !== assignby && isEdit}
+                        disabled={currentUser?.user.uid !== assignby && isEdit}
                         type="date"
                         id='dueate'
                         name='duedate'
@@ -119,11 +117,10 @@ const Createtask = ({ uid, title, detail, duedate, assignto, assignby, status, i
                         onChange={(e) => handlechange(e)}
                     />
                 </div>
-
                 <div className='flex col items-stretch w-full'>
                     <label htmlFor="assign">Assign to</label>
                     <select
-                        disabled={currentUser.user.uid !== assignby && isEdit}
+                        disabled={currentUser?.user.uid !== assignby && isEdit}
                         name="assignto"
                         id="assign"
                         value={task.assignto}
@@ -137,4 +134,4 @@ const Createtask = ({ uid, title, detail, duedate, assignto, assignby, status, i
     )
 }
 
-export default Createtask;
+export default memo(Createtask);

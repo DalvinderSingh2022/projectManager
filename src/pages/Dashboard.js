@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import Createtask from '../components/Createtask';
 import { AppContext } from '../App';
+import Loading from '../components/Loading';
 
 const Dashboard = () => {
     const [tasks, setTasks] = useState([]);
@@ -45,16 +46,16 @@ const Dashboard = () => {
                 <section className='flex col j-start items-stretch gap2'>
                     <div className="heading">Tasks</div>
                     <div className="flex col tasks items-stretch j-start">
-                        {tasks && tasks.map(task => {
-                            return (
+                        {tasks?.length ? tasks.map(task => {
+                            return task ? (
                                 <div className="task flex j-between" key={task.uid}>
                                     <div>
                                         <span className="title">{task.title}</span>
                                         <div className="due">{task.duedate}</div>
                                     </div>
                                     <span className="status" style={{ backgroundColor: `${task.status === 'completed' ? `var(--green)` : `var(--yellow)`}` }}>{task.status}</span>
-                                </div>);
-                        })}
+                                </div>) : <Loading />;
+                        }) : <div>There are no tasks</div>}
                     </div>
                 </section >
             </div >

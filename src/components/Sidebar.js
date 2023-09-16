@@ -11,9 +11,10 @@ const Sidebar = () => {
 
     const handleclick = () => {
         signOut(auth)
+            .then(localStorage.removeItem("taskUser"))
             .then(setcurrentUser(null))
             .catch(error => console.error(error));
-        navigate('/');
+        navigate('/login');
     }
 
     useEffect(() => {

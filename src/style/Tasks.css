@@ -2,7 +2,7 @@
     color: var(--text-sec);
 }
 
-.filters button:where(.active, :hover) {
+.filters button:where(.pri, :hover) {
     color: var(--text);
 }
 

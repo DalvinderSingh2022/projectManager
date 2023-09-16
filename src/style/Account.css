@@ -1,6 +1,11 @@
 .account {
     width: 100vw;
     height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 0;
+    background-color: var(--background);
+    z-index: 999;
 }
 
 .account section {
@@ -25,13 +30,13 @@ section form {
     width: min(280px, 100%);
 }
 
-:is(.forget, .change) button {
+:is(.forgot, .change) button {
     background-color: inherit;
     color: var(--primary);
     margin: 0 .4em;
 }
 
-:is(.forget, .change) button:hover {
+:is(.forgot, .change) button:hover {
     text-decoration: underline;
 }
 

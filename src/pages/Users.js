@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import User from '../components/User';
 import { AppContext } from '../App';
+import Loading from '../components/Loading';
 
 const Users = () => {
     const { dbUsers } = useContext(AppContext);
@@ -30,7 +31,7 @@ const Users = () => {
                 <button type='button' onClick={(e) => { setValue('') }} className="btn round flex gap2 material-symbols-outlined">cancel<span>clear</span></button>
             </form>
             <section className='flex gap wrap'>
-                {users?.length ? users.map(user => <User {...user} key={user.uid} />) : <div>Can't found {value}</div>}
+                {users?.length ? users.map(user => user ? <User {...user} key={user.uid} /> : <Loading />) : <div>Can't found {value}</div>}
             </section>
         </aside>
     )

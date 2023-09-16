@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { memo, useContext, useEffect, useState } from 'react';
 import { AppContext } from '../App';
 import { Link } from 'react-router-dom';
 
@@ -24,7 +24,7 @@ const Task = ({ title, detail, assignto, status, uid }) => {
             <div className="flex items-start col"><span className='status' style={{ backgroundColor: `${status === 'completed' ? `var(--green)` : `var(--yellow)`}` }}>{status}</span></div>
             <div className="flex j-between">
                 <div className="assign user" title={assignUser.displayName}>
-                    <img src={assignUser.photoURL} alt={assignUser.displayName} />
+                    <img src={assignUser.photoURL} alt={assignUser.displayName} loading='lazy' />
                 </div>
                 <button className="btn round flex gap2 material-symbols-outlined comments"><span>{0} </span>comment</button>
             </div>
@@ -32,4 +32,4 @@ const Task = ({ title, detail, assignto, status, uid }) => {
     )
 }
 
-export default Task;
+export default memo(Task);

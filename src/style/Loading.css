@@ -1,0 +1,31 @@
+svg {
+    animation: rotate 1.5s infinite linear;
+}
+
+circle {
+    stroke: var(--grey);
+    fill: none;
+    stroke-linecap: round;
+    stroke-dasharray: 320;
+    animation: spin 3s infinite ease-in-out;
+}
+
+@keyframes spin {
+    0% {
+        stroke-dashoffset: 630;
+    }
+
+    100% {
+        stroke-dashoffset: 0;
+    }
+}
+
+@keyframes rotate {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}

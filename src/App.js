@@ -1,4 +1,4 @@
-import React, { createContext, useEffect, useState } from 'react';
+import React, { createContext, useCallback, useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 import Login from './pages/Login';
@@ -14,51 +14,54 @@ import '../src/style/Account.css';
 import '../src/style/Dashboard.css';
 import '../src/style/Users.css';
 import '../src/style/Tasks.css';
+import '../src/style/Loading.css';
 
 import { collection, getDocs } from 'firebase/firestore';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth, db } from './firebase';
+import Notfound from './pages/Notfound';
 
 export const AppContext = createContext();
 
 const App = () => {
     const [currentUser, setcurrentUser] = useState(null);
-    const [dbUsers, setdbusers] = useState({});
-    const [dbTasks, setdbtasks] = useState({});
-    const [dbcomments, setdbcomments] = useState({});
+    const [dbUsers, setdbusers] = useState([]);
+    const [dbTasks, setdbtasks] = useState([]);
+    const [dbcomments, setdbcomments] = useState([]);
     const [update, updatedb] = useState(false);
 
-    useEffect(() => {
-        onAuthStateChanged(auth, user => {
-            setcurrentUser(user);
+    const database = useCallback(async () => {
+        localStorage.getItem("taskUser") ?
+            setcurrentUser(JSON.parse(localStorage.getItem("taskUser"))) :
+            onAuthStateChanged(auth, user => {
+                setcurrentUser(user);
+            });
+
+        const dbtasks = [];
+        const querytasks = await getDocs(collection(db, "tasks"));
+        querytasks.forEach(task => {
+            dbtasks.push(task.data());
         });
+        setdbtasks(dbtasks)
+
+        const dbusers = [];
+        const queryusers = await getDocs(collection(db, "users"));
+        queryusers.forEach(user => {
+            dbusers.push(user.data());
+        });
+        setdbusers(dbusers)
+
+        const dbcomments = [];
+        const querycomments = await getDocs(collection(db, "comments"));
+        querycomments.forEach(comment => {
+            dbcomments.push(comment.data());
+        });
+        setdbcomments(dbcomments)
     }, [])
 
     useEffect(() => {
-        const database = async () => {
-            const dbtasks = [];
-            const querytasks = await getDocs(collection(db, "tasks"));
-            querytasks.forEach(task => {
-                dbtasks.push(task.data());
-            });
-            setdbtasks(dbtasks)
-
-            const dbusers = [];
-            const queryusers = await getDocs(collection(db, "users"));
-            queryusers.forEach(user => {
-                dbusers.push(user.data());
-            });
-            setdbusers(dbusers)
-
-            const dbcomments = [];
-            const querycomments = await getDocs(collection(db, "comments"));
-            querycomments.forEach(comment => {
-                dbcomments.push(comment.data());
-            });
-            setdbcomments(dbcomments)
-        }
         database();
-    }, [update]);
+    }, [database, update]);
 
     return (
         <AppContext.Provider value={{ currentUser, setcurrentUser, dbTasks, dbUsers, dbcomments, updatedb }}>
@@ -72,6 +75,7 @@ const App = () => {
                         <Route path='tasks' element={<Tasks />} />
                         <Route path='tasks/:id' element={<Edittask />} />
                     </Route>
+                    <Route path='*' element={<Notfound />} />
                 </Routes>
             </BrowserRouter>
         </AppContext.Provider >

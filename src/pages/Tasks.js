@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import Task from '../components/Task';
 import { AppContext } from '../App';
+import Loading from '../components/Loading';
 
 const Tasks = () => {
     const { dbTasks } = useContext(AppContext);
@@ -13,8 +14,8 @@ const Tasks = () => {
 
         const btns = btnsRef.current.querySelectorAll('button');
         const btnclick = (btn) => {
-            btns.forEach(btn => btn.classList.remove('active'))
-            btn.classList.add('active');
+            btns.forEach(btn => btn.classList.remove('pri'))
+            btn.classList.add('pri');
             setStatus(btn.getAttribute('data-value'));
         }
         btns.forEach(btn => btn.addEventListener('click', () => btnclick(btn)))
@@ -26,12 +27,12 @@ const Tasks = () => {
     return (
         <aside className='tasks'>
             <div className="filters flex j-start gap" ref={btnsRef}>
-                <button className="btn round flex gap2 active" data-value={null}>All</button>
+                <button className="btn round flex gap2 pri" data-value={null}>All</button>
                 <button className="btn round flex gap2 material-symbols-outlined" data-value={'completed'}>check_circle<span>Completed</span></button>
                 <button className="btn round flex gap2 material-symbols-outlined" data-value={'pending'}>schedule<span>Pending</span></button>
             </div>
             <section className='flex gap wrap'>
-                {tasks?.length ? tasks.map(task => <Task {...task} key={task.uid} />) : <div>There is no {status && `${status}`} task</div>}
+                {tasks?.length ? tasks.map(task => task ? <Task {...task} key={task.uid} /> : <Loading />) : <div>There is no {status && `${status}`} task</div>}
             </section>
         </aside>
     )

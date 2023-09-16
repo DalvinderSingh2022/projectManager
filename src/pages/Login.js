@@ -22,6 +22,7 @@ const Login = () => {
         e.preventDefault();
         signInWithEmailAndPassword(auth, user.email, user.password)
             .then(userInfo => {
+                localStorage.setItem("taskUser", JSON.stringify(userInfo));
                 setcurrentUser(userInfo);
                 navigate('/');
             })
@@ -55,6 +56,10 @@ const Login = () => {
                             placeholder='enter your password'
                             value={user.password || ''}
                             onChange={(e) => handlechange(e)} />
+                    </div>
+
+                    <div className="forgot flex j-end w-full">
+                        <button type='button'><Link to='/reset'>forgot password?</Link></button>
                     </div>
 
                     <div className='flex col items-stretch w-full submit'>

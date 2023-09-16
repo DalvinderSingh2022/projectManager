@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { memo, useContext, useEffect, useState } from 'react'
 import { AppContext } from '../App';
 
 const User = ({ displayName, photoURL, uid }) => {
@@ -18,7 +18,7 @@ const User = ({ displayName, photoURL, uid }) => {
     return (
         <div className="user flex gap2 col items-stretch">
             <div className="flex">
-                <img src={photoURL} alt={displayName} />
+                <img src={photoURL} alt={displayName} loading='lazy' />
             </div>
             <div className="flex col items-start j-start">
                 <span className="name">{displayName}</span>
@@ -28,4 +28,4 @@ const User = ({ displayName, photoURL, uid }) => {
     )
 }
 
-export default User;
+export default memo(User);
