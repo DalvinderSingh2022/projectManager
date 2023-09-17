@@ -10,7 +10,7 @@
     background-color: var(--white);
     border-radius: 18px;
     padding: 1em;
-    width: min(270px, 100%);
+    width: min(320px, 100%);
 }
 
 .tasks .task .title {

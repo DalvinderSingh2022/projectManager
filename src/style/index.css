@@ -176,6 +176,7 @@ nav {
     padding: 1.4em 2em;
     position: sticky;
     top: 0;
+    z-index: 9;
 }
 
 header .profile .name {
@@ -226,7 +227,7 @@ main.close {
 
 nav {
     height: 100vh;
-    z-index: 9;
+    z-index: 99;
 }
 
 nav .home.btn {
