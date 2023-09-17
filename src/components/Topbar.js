@@ -9,6 +9,7 @@ const Topbar = () => {
     if (localStorage.getItem("taskUser") && !currentUser) {
         return <Loading full={true} />
     }
+
     if (!currentUser) {
         return <Navigate to='/login' />
     }

@@ -19,8 +19,9 @@ const User = ({ displayName, photoURL, uid }) => {
         <div className="user flex gap2 col items-stretch">
             <div className="flex">
                 <img src={photoURL} alt={displayName} loading='lazy' />
+                {/* <button className='btn round material-symbols-outlined' title='Permote to Admin'>stars<span></span></button> */}
             </div>
-            <div className="flex col items-start j-start">
+            <div className="flex items-start j-start col">
                 <span className="name">{displayName}</span>
                 <span className="taskscount">Tasks: {tasks}</span>
             </div>

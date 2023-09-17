@@ -1,33 +1,34 @@
 import React, { createContext, useCallback, useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
-import Login from './pages/Login';
-import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
+import Edittask from './pages/Edittask';
+import Register from './pages/Register';
+import Notfound from './pages/Notfound';
+import Login from './pages/Login';
 import Users from './pages/Users';
 import Tasks from './pages/Tasks';
-import Layout from './components/Layout';
-import Edittask from './pages/Edittask';
+import Reset from './pages/Reset';
 
-import '../src/style/index.css';
-import '../src/style/Account.css';
+import Layout from './components/Layout';
+
 import '../src/style/Dashboard.css';
+import '../src/style/Account.css';
+import '../src/style/index.css';
 import '../src/style/Users.css';
 import '../src/style/Tasks.css';
-import '../src/style/Loading.css';
 
 import { collection, getDocs } from 'firebase/firestore';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth, db } from './firebase';
-import Notfound from './pages/Notfound';
 
 export const AppContext = createContext();
 
 const App = () => {
     const [currentUser, setcurrentUser] = useState(null);
+    const [dbcomments, setdbcomments] = useState([]);
     const [dbUsers, setdbusers] = useState([]);
     const [dbTasks, setdbtasks] = useState([]);
-    const [dbcomments, setdbcomments] = useState([]);
     const [update, updatedb] = useState(false);
 
     const database = useCallback(async () => {
@@ -69,6 +70,7 @@ const App = () => {
                 <Routes>
                     <Route path='/login' element={<Login />} />
                     <Route path='/register' element={<Register />} />
+                    <Route path='/reset' element={<Reset />} />
                     <Route path='/' element={<Layout />}>
                         <Route index element={<Dashboard />} />
                         <Route path='users' element={<Users />} />

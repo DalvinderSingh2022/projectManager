@@ -20,7 +20,6 @@
 
     --background: #eaeef7;
     --hover: #F7F7F7;
-    --shadow: rgba(54, 54 54, .3);
 
     --green: #83c788;
     --yellow: #ffcf73;
@@ -70,6 +69,16 @@ section .heading {
     padding: 0px 12px;
     border-radius: 20px;
     color: var(--white);
+}
+
+.full {
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 0;
+    background-color: var(--background);
+    z-index: 999;
 }
 
 .w-full {
@@ -152,21 +161,19 @@ section .heading {
     display: grid;
     grid-template-columns: 70% 30%;
     gap: 1em;
-    padding: 1em 2em;
+    padding: 2em 1em 1em;
 }
 
 .container section {
     background-color: var(--white);
-    padding: 1em 2em 2em;
+    padding: 1em;
     border-radius: 10px;
-    box-shadow: var(--shadow) 0px 1px 0px, var(--shadow) 0px 0px 8px;
 }
 
 header,
 nav {
     background-color: var(--white);
     padding: 1.4em 2em;
-    box-shadow: 0 2px 24px var(--shadow);
     position: sticky;
     top: 0;
 }
@@ -277,6 +284,72 @@ aside .filters {
 aside section {
     background-color: var(--hover);
     border-radius: 0;
+}
+
+svg {
+    animation: rotate 1.5s infinite linear;
+}
+
+circle {
+    stroke: var(--grey);
+    fill: none;
+    stroke-linecap: round;
+    stroke-dasharray: 320;
+    animation: spin 3s infinite ease-in-out;
+}
+
+@keyframes spin {
+    0% {
+        stroke-dashoffset: 630;
+    }
+
+    100% {
+        stroke-dashoffset: 0;
+    }
+}
+
+@keyframes rotate {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.alertBox {
+    background-color: rgba(255, 255, 255, .3);
+}
+
+.alertBox .alert {
+    margin: 2em;
+    padding: 0.6em 2em;
+    color: var(--text);
+    border-radius: 12px;
+}
+
+.alertBox button,
+.alertBox button:hover {
+    background-color: inherit;
+}
+
+.alertBox .alert.verified {
+    background-color: var(--green);
+}
+
+.alertBox .alert.report {
+    background-color: var(--red);
+}
+
+.alertBox .alert.warning {
+    background-color: var(--yellow);
+}
+
+@media screen and (max-width:1280px) {
+    .container {
+        grid-template-columns: 1fr;
+    }
 }
 
 @media screen and (max-width:820px) {

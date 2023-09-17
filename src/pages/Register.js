@@ -4,10 +4,12 @@ import { AppContext } from '../App';
 import { auth, db } from '../firebase';
 import { useNavigate, Link } from 'react-router-dom';
 import { doc, setDoc } from "firebase/firestore";
+import AlertBox from '../components/AlertBox';
 
 const SignIn = () => {
-    const navigate = useNavigate();
     const { setcurrentUser } = useContext(AppContext);
+    const [alert, setAlert] = useState(null);
+    const navigate = useNavigate();
     const [user, setUser] = useState({
         displayName: null,
         email: null,
@@ -30,10 +32,16 @@ const SignIn = () => {
                 updateProfile(auth.currentUser, { displayName: user.displayName, photoURL: user.photoURL });
                 setDoc(doc(db, "users", userInfo.user.uid), { ...user });
                 localStorage.setItem("taskUser", JSON.stringify(userInfo));
-                setcurrentUser(userInfo);
-                navigate('/');
+                setAlert({ message: 'Registered successfully, Welcome ' + user.displayName, type: 'verified' });
+                setTimeout(() => {
+                    setcurrentUser(userInfo);
+                    navigate('/');
+                }, 2500)
             })
-            .catch(error => console.error(error));
+            .catch(error => {
+                setAlert({ message: error.message, type: 'report' });
+                console.error(error)
+            });
     }
 
     const handleAvatar = (e) => {
@@ -61,61 +69,64 @@ const SignIn = () => {
     ]
 
     return (
-        <div className="flex account">
-            <section className='flex col gap'>
-                <div>
-                    <h1>Welcome back</h1>
-                    <p>Welcome back! Please enter your details.</p>
-                </div>
-                <form className='flex col gap2' onSubmit={(e) => handlesubmit(e)}>
-                    <div className='flex col items-stretch w-full'>
-                        <label htmlFor="avatar">Avatar</label>
-                        <div className="avatars w-full flex j-start wrap">
-                            {avatars.map((avatar, index) => <img onClick={(e) => handleAvatar(e)} src={avatar} alt={'avatar' + (index + 1)} key={index} loading='lazy' />)}
+        <>
+            <div className="flex account full">
+                <section className='flex col gap'>
+                    <div>
+                        <h1>Welcome back</h1>
+                        <p>Welcome back! Please enter your details.</p>
+                    </div>
+                    <form className='flex col gap2' onSubmit={(e) => handlesubmit(e)}>
+                        <div className='flex col items-stretch w-full'>
+                            <label htmlFor="avatar">Avatar</label>
+                            <div className="avatars w-full flex j-start wrap">
+                                {avatars.map((avatar, index) => <img onClick={(e) => handleAvatar(e)} src={avatar} alt={'avatar' + (index + 1)} key={index} loading='lazy' />)}
+                            </div>
                         </div>
-                    </div>
-                    <div className='flex col items-stretch w-full'>
-                        <label htmlFor="displayName">Name</label>
-                        <input
-                            type="text"
-                            id='displayName'
-                            name='displayName'
-                            placeholder='Enter your name'
-                            value={user.displayName || ''}
-                            onChange={(e) => handlechange(e)} />
-                    </div>
-                    <div className='flex col items-stretch w-full'>
-                        <label htmlFor="email">Email</label>
-                        <input
-                            type="email"
-                            id='email'
-                            name='email'
-                            placeholder='Enter your email'
-                            value={user.email || ''}
-                            onChange={(e) => handlechange(e)} />
-                    </div>
-                    <div className='flex col items-stretch w-full'>
-                        <label htmlFor="password">Password</label>
-                        <input
-                            type="password"
-                            id='password'
-                            name='password'
-                            placeholder='enter your password'
-                            value={user.password || ''}
-                            onChange={(e) => handlechange(e)} />
-                    </div>
+                        <div className='flex col items-stretch w-full'>
+                            <label htmlFor="displayName">Name</label>
+                            <input
+                                type="text"
+                                id='displayName'
+                                name='displayName'
+                                placeholder='Enter your name'
+                                value={user.displayName || ''}
+                                onChange={(e) => handlechange(e)} />
+                        </div>
+                        <div className='flex col items-stretch w-full'>
+                            <label htmlFor="email">Email</label>
+                            <input
+                                type="email"
+                                id='email'
+                                name='email'
+                                placeholder='Enter your email'
+                                value={user.email || ''}
+                                onChange={(e) => handlechange(e)} />
+                        </div>
+                        <div className='flex col items-stretch w-full'>
+                            <label htmlFor="password">Password</label>
+                            <input
+                                type="password"
+                                id='password'
+                                name='password'
+                                placeholder='Enter password'
+                                value={user.password || ''}
+                                onChange={(e) => handlechange(e)} />
+                        </div>
 
-                    <div className='flex col items-stretch w-full submit'>
-                        <button type='submit' className="btn pri submit">Register</button>
-                    </div>
+                        <div className='flex col items-stretch w-full submit'>
+                            <button type='submit' className="btn pri submit">Register</button>
+                        </div>
 
-                    <div className='change'>
-                        Already have an account?
-                        <button type='button'><Link to='/login'>login</Link></button>
-                    </div>
-                </form>
-            </section>
-        </div>
+                        <div className='change'>
+                            Already have an account?
+                            <button type='button'><Link to='/login'>login</Link></button>
+                        </div>
+                    </form>
+                </section>
+            </div>
+            {alert && <AlertBox {...alert} setAlert={setAlert} />}
+        </>
     )
 }
 
