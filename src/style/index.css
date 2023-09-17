@@ -277,8 +277,6 @@ aside .filters {
     padding: 1em;
     background-color: var(--white);
     border-radius: 8px;
-    position: sticky;
-    top: 0;
 }
 
 aside section {

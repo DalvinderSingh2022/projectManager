@@ -48,12 +48,12 @@ const Dashboard = () => {
                     <div className="flex col tasks items-stretch j-start">
                         {tasks ? tasks.map(task => {
                             return (
-                                <div className="task flex j-between" key={task.uid}>
-                                    <div>
-                                        <span className="title">{task.title}</span>
+                                <div className="task flex col items-start gap" key={task.uid}>
+                                    <span className="title w-full">{task.title}</span>
+                                    <div className='flex j-between w-full'>
                                         <div className="due">Due: {task.duedate}</div>
+                                        <span className="status" style={{ backgroundColor: `${task.status === 'completed' ? `var(--green)` : `var(--yellow)`}` }}>{task.status}</span>
                                     </div>
-                                    <span className="status" style={{ backgroundColor: `${task.status === 'completed' ? `var(--green)` : `var(--yellow)`}` }}>{task.status}</span>
                                 </div>);
                         }) : (tasks?.length ? <Loading /> : <div>There are no tasks</div>)}
                     </div>

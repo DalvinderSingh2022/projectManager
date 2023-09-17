@@ -14,8 +14,11 @@
 }
 
 .tasks .task .title {
-    font-size: 1.6em;
+    font-size: 1.4em;
     text-transform: capitalize;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 .tasks .task .detail {
