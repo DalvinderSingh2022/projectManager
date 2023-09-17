@@ -57,7 +57,7 @@ form :where(input:not(:disabled), textarea, select):focus {
 }
 
 section {
-    padding: 1.4em 2em;
+    padding: 1.4em 1em;
 }
 
 section .heading {
