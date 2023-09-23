@@ -12,7 +12,6 @@
     --primary: #475be8;
 
     --white: #fbfbfb;
-    --black: #1a1d1f;
     --grey: #E4E4E4;
 
     --text: #11142d;
@@ -139,6 +138,7 @@ section .heading {
     color: var(--text);
     white-space: nowrap;
     background-color: var(--background);
+    text-align: center;
 }
 
 .btn:hover {
@@ -290,7 +290,6 @@ svg {
 }
 
 circle {
-    stroke: var(--grey);
     fill: none;
     stroke-linecap: round;
     stroke-dasharray: 320;

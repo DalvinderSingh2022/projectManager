@@ -101,8 +101,8 @@ const Createtask = ({ uid, title, detail, duedate, assignto, assignby, status, i
                             value={task.title}
                             onChange={(e) => handlechange(e)}
                         />
-                        {(!isEdit || currentUser?.user.uid === assignby || currentUser?.user.uid === assignto) && <button type="submit" className="btn pri round material-symbols-outlined">add</button>}
-                        {(currentUser?.user.uid === assignby && isEdit) && <button type="button" className="btn pri round material-symbols-outlined" style={{ backgroundColor: 'var(--red)' }} onClick={() => handledelete()}>Delete</button>}
+                        {(!isEdit || currentUser?.user.uid === assignby || currentUser?.user.uid === assignto) && <button type="submit" className="btn pri round flex material-symbols-outlined">add</button>}
+                        {(currentUser?.user.uid === assignby && isEdit) && <button type="button" className="btn pri round flex material-symbols-outlined" style={{ backgroundColor: 'var(--red)' }} onClick={() => handledelete()}>Delete</button>}
                     </div>
                 </div>
                 <div className='flex col items-stretch w-full'>
@@ -118,19 +118,19 @@ const Createtask = ({ uid, title, detail, duedate, assignto, assignby, status, i
                         onChange={(e) => handlechange(e)}
                     />
                 </div>
+                {(currentUser?.user.uid === assignby || currentUser?.user.uid === assignto) &&
+                    <div className='flex col items-stretch'>
+                        <label htmlFor="assign">Status</label>
+                        <select
+                            name="status"
+                            id="status"
+                            value={task.status}
+                            onChange={(e) => handlechange(e)}>
+                            <option value="completed">Completed</option>
+                            <option value="pending">Pending</option>
+                        </select>
+                    </div>}
                 <div className="flex gap items-stretch">
-                    {(currentUser?.user.uid === assignby || currentUser?.user.uid === assignto) &&
-                        <div className='flex col items-stretch'>
-                            <label htmlFor="assign">Status</label>
-                            <select
-                                name="status"
-                                id="status"
-                                value={task.status}
-                                onChange={(e) => handlechange(e)}>
-                                <option value="completed">Completed</option>
-                                <option value="pending">Pending</option>
-                            </select>
-                        </div>}
                     <div className='flex col items-stretch '>
                         <label htmlFor="duedate">Due Date</label>
                         <input
@@ -150,7 +150,6 @@ const Createtask = ({ uid, title, detail, duedate, assignto, assignby, status, i
                             id="assign"
                             value={task.assignto}
                             onChange={(e) => handlechange(e)}>
-                            <option value={''}>users</option>
                             {users && users.map(user => <option key={user.uid} value={user.uid}>{user.displayName}</option>)}
                         </select>
                     </div>

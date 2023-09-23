@@ -1,12 +1,13 @@
 import React, { memo, useContext, useEffect, useState } from 'react';
 import { AppContext } from '../App';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const Task = ({ title, detail, assignto, assignby, status, uid }) => {
     const { currentUser, dbcomments } = useContext(AppContext);
     const [commentcount, setcommentcount] = useState(0);
     const [assignUser, setAssignUser] = useState({});
     const { dbUsers } = useContext(AppContext);
+    const navigate = useNavigate();
 
     useEffect(() => {
         dbUsers.forEach(user => {
@@ -18,11 +19,8 @@ const Task = ({ title, detail, assignto, assignby, status, uid }) => {
     }, [assignto, dbUsers, dbcomments, uid, setAssignUser]);
 
     return (
-        <div className="task flex col gap2 items-stretch">
-            <div className="flex j-between">
-                <span className='title'>{title}</span>
-                <Link to={`/tasks/${uid}`}><button className="btn round flex gap2 material-symbols-outlined">arrow_outward</button></Link>
-            </div>
+        <div className="task flex col gap2 items-stretch" onClick={() => navigate(`/tasks/${uid}`)}>
+            <span className='title'>{title}</span>
             <p className="detail">{detail}</p>
             <div className="flex j-start gap2">
                 <span className='status' style={{ backgroundColor: `${status === 'completed' ? `var(--green)` : `var(--yellow)`}` }}>{status}</span>

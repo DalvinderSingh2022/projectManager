@@ -43,21 +43,22 @@ const App = () => {
         querytasks.forEach(task => {
             dbtasks.push(task.data());
         });
-        setdbtasks(dbtasks)
+        setdbtasks(dbtasks.sort((a, b) => new Date(a.duedate).getTime() - new Date(b.duedate).getTime())
+            .sort((a, b) => a.status !== 'completed' && b.status !== 'pending' ? -1 : 1));
 
         const dbusers = [];
         const queryusers = await getDocs(collection(db, "users"));
         queryusers.forEach(user => {
             dbusers.push(user.data());
         });
-        setdbusers(dbusers)
+        setdbusers(dbusers.sort((a, b) => b.displayName.toLowerCase() > a.displayName.toLowerCase() ? -1 : (b.displayName.toLowerCase() < a.displayName.toLowerCase() ? 1 : 0)))
 
         const dbcomments = [];
         const querycomments = await getDocs(collection(db, "comments"));
         querycomments.forEach(comment => {
             dbcomments.push(comment.data());
         });
-        setdbcomments(dbcomments)
+        setdbcomments(dbcomments.sort((a, b) => Number(b.uid.split("$")[2]) - Number(a.uid.split("$")[2])));
     }, [])
 
     useEffect(() => {

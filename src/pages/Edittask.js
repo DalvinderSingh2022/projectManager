@@ -58,8 +58,8 @@ const Edittask = () => {
                     <div className="flex j-between">
                         <div className="heading">Comments</div>
                         <div className="flex gap2">
-                            {addComment && <button className="btn round material-symbols-outlined" onClick={() => handlesubmit()}>save</button>}
-                            <button className="btn round material-symbols-outlined" onClick={() => setaddComment(prev => !prev)}>{!addComment ? 'add' : "close"}</button> :
+                            {addComment && <button className="btn round flex material-symbols-outlined" onClick={() => handlesubmit()}>save</button>}
+                            <button className="btn round flex material-symbols-outlined" onClick={() => setaddComment(prev => !prev)}>{!addComment ? 'add' : "close"}</button> :
                         </div>
                     </div>
                     {addComment &&
