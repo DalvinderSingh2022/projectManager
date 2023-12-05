@@ -31,7 +31,7 @@ const Users = () => {
                 <button type='button' onClick={(e) => { setValue('') }} className="btn round flex gap2 material-symbols-outlined">cancel<span>clear</span></button>
             </form>
             <section className='flex gap wrap items-stretch'>
-                {users?.length ? users.map(user => user ? <User {...user} key={user.uid} /> : <Loading />) : <div>Can't found {value}</div>}
+                {users?.length ? users.map(user => <User {...user} key={user.uid} />) : (users ? <Loading /> : <div>Can't found {value}</div>)}
             </section>
         </aside>
     )

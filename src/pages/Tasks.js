@@ -32,7 +32,7 @@ const Tasks = () => {
                 <button className="btn round flex gap2 material-symbols-outlined" data-value={'pending'}>schedule<span>Pending</span></button>
             </div>
             <section className='flex gap wrap'>
-                {tasks?.length ? tasks.map(task => task ? <Task {...task} key={task.uid} /> : <Loading />) : <div>There is no {status && `${status}`} task</div>}
+                {tasks?.length ? tasks.map(task => <Task {...task} key={task.uid} />) : (tasks ? <Loading /> : <div>There is no {status && `${status}`} task</div>)}
             </section>
         </aside>
     )

@@ -22,19 +22,19 @@ const Dashboard = () => {
             <div className='statistics'>
                 <div className="box flex col items-start">
                     <span className="title">Assign by you</span>
-                    <div className="stat">{tasks.filter(a => a.uid.split(":")[0] === (currentUser.user.uid)).length}</div>
+                    <div className="stat">{tasks?.length ? tasks.filter(a => a.uid.split(":")[0] === (currentUser.user.uid)).length : (tasks ? <Loading /> : 0)}</div>
                 </div>
                 <div className="box flex col items-start">
                     <span className="title">Assign to you</span>
-                    <div className="stat">{tasks.filter(a => a.uid.split(":")[1] === (currentUser.user.uid)).length}</div>
+                    <div className="stat">{tasks?.length ? tasks.filter(a => a.uid.split(":")[1] === (currentUser.user.uid)).length : (tasks ? <Loading /> : 0)}</div>
                 </div>
                 <div className="box flex col items-start">
                     <span className="title">Completed Tasks</span>
-                    <div className="stat">{tasks.filter(a => a.status === 'completed').length}</div>
+                    <div className="stat">{tasks?.length ? tasks.filter(a => a.status === 'completed').length : (tasks ? <Loading /> : 0)}</div>
                 </div>
                 <div className="box flex col items-start">
                     <span className="title">Pending Tasks</span>
-                    <div className="stat">{tasks.filter(a => a.status === 'pending').length}</div>
+                    <div className="stat">{tasks?.length ? tasks.filter(a => a.status === 'pending').length : (tasks ? <Loading /> : 0)}</div>
                 </div>
             </div>
 
@@ -46,7 +46,7 @@ const Dashboard = () => {
                 <section className='flex col j-start items-stretch gap2'>
                     <div className="heading">Tasks</div>
                     <div className="flex col tasks items-stretch j-start">
-                        {tasks ? tasks.map(task => {
+                        {tasks?.length ? tasks.map(task => {
                             return (
                                 <div className="task flex col items-start gap" key={task.uid}>
                                     <span className="title w-full">{task.title}</span>
@@ -54,8 +54,8 @@ const Dashboard = () => {
                                         <div className="due">Due: {task.duedate}</div>
                                         <span className="status" style={{ backgroundColor: `${task.status === 'completed' ? `var(--green)` : `var(--yellow)`}` }}>{task.status}</span>
                                     </div>
-                                </div>);
-                        }) : (tasks?.length ? <Loading /> : <div>There are no tasks</div>)}
+                                </div>)
+                        }) : (tasks ? <Loading /> : <div>There is no task</div>)}
                     </div>
                 </section >
             </div >
