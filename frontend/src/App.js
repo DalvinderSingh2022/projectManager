@@ -12,11 +12,11 @@ import Reset from './pages/Reset';
 
 import Layout from './components/Layout';
 
-import '../src/style/Dashboard.css';
-import '../src/style/Account.css';
-import '../src/style/index.css';
-import '../src/style/Users.css';
-import '../src/style/Tasks.css';
+import './style/Dashboard.css';
+import './style/Account.css';
+import './style/index.css';
+import './style/Users.css';
+import './style/Tasks.css';
 
 import { collection, getDocs } from 'firebase/firestore';
 import { onAuthStateChanged } from 'firebase/auth';
