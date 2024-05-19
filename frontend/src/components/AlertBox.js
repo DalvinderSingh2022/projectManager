@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef } from 'react';
 
 const AlertBox = ({ message, type, setAlert }) => {
     const boxRef = useRef();

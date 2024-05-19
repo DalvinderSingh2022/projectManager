@@ -1,20 +1,18 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import User from '../components/User';
-import { AppContext } from '../App';
 import Loading from '../components/Loading';
+import axios from 'axios';
 
 const Users = () => {
-    const { dbUsers } = useContext(AppContext);
     const [users, setUsers] = useState([]);
     const [value, setValue] = useState('');
 
     useEffect(() => {
-        setUsers(dbUsers.filter(a => {
-            const name = a?.displayName.toLowerCase().replaceAll(" ", "");
-            const search = value.toLowerCase().replaceAll(" ", "");
-            return name.includes(search);
-        }));
-    }, [value, dbUsers]);
+        axios.get(`http://localhost:5000/api/users${value ? '?name=' + value : ""}`)
+            .then(({ data: user }) => {
+                setUsers(user);
+            });
+    }, [value]);
 
     return (
         <aside className='users'>
@@ -28,10 +26,10 @@ const Users = () => {
                     value={value}
                     onChange={(e) => setValue(e.target.value)}
                 />
-                <button type='button' onClick={(e) => { setValue('') }} className="btn round flex gap2 material-symbols-outlined">cancel<span>clear</span></button>
+                <button type='button' onClick={() => setValue('')} className="btn round flex gap2 material-symbols-outlined">cancel<span>clear</span></button>
             </form>
             <section className='flex gap wrap items-stretch'>
-                {users?.length ? users.map(user => <User {...user} key={user.uid} />) : (users ? <Loading /> : <div>Can't found {value}</div>)}
+                {users?.length > 0 ? users.map(user => <User {...user} key={user._id} />) : (users.length !== 0 ? <Loading /> : <div>Can't found {value}</div>)}
             </section>
         </aside>
     )

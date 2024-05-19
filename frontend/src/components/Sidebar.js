@@ -1,24 +1,17 @@
-import React, { useContext, useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { signOut } from "firebase/auth";
-import { auth } from '../firebase';
-import { AppContext } from '../App';
 import AlertBox from './AlertBox';
+import axios from 'axios';
 
 const Sidebar = () => {
-    const { setcurrentUser, currentUser } = useContext(AppContext);
     const [alert, setAlert] = useState(null);
     const navigate = useNavigate();
     const btnsRef = useRef();
 
     const handleclick = () => {
-        signOut(auth)
+        axios.put("http://localhost:5000/api/users/logout")
             .then(() => {
-                setAlert({ message: 'Logged out successfully, Come back soon ' + currentUser.user.displayName, type: 'verified' });
-                setTimeout(() => {
-                    localStorage.removeItem("taskUser");
-                    setcurrentUser(null);
-                }, 2500)
+                setAlert({ message: 'Logged out successfully', type: 'verified' });
             })
             .catch(error => {
                 setAlert({ message: error.message, type: 'report' });
@@ -45,7 +38,7 @@ const Sidebar = () => {
                     <span className="material-symbols-outlined">drag_handle</span>
                 </button>
                 <div className="flex j-start col items-stretch gap" ref={btnsRef}>
-                    <div className="logo">Tasker</div>
+                    <div className="logo">MANAGER</div>
                     <Link to='/' className="pri btn flex link j-start">
                         <span className="material-symbols-outlined">dashboard</span>
                         <p>Dashboard</p>

@@ -1,12 +1,9 @@
-import { signInWithEmailAndPassword } from 'firebase/auth';
-import React, { useState, useContext } from 'react';
-import { auth } from '../firebase';
-import { AppContext } from '../App';
+import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import AlertBox from '../components/AlertBox';
+import axios from 'axios';
 
 const Login = () => {
-    const { setcurrentUser } = useContext(AppContext);
     const [alert, setAlert] = useState(null);
     const navigate = useNavigate();
     const [user, setUser] = useState({
@@ -22,14 +19,10 @@ const Login = () => {
 
     const handlesubmit = (e) => {
         e.preventDefault();
-        signInWithEmailAndPassword(auth, user.email, user.password)
-            .then(userInfo => {
-                localStorage.setItem("taskUser", JSON.stringify(userInfo));
-                setAlert({ message: 'Logged In successfully, Welcome back ' + userInfo.user.displayName, type: 'verified' });
-                setTimeout(() => {
-                    setcurrentUser(userInfo);
-                    navigate('/');
-                }, 2500);
+        axios.put("http://localhost:5000/api/users/login", user)
+            .then(({ data: user }) => {
+                setAlert({ message: 'Logged In successfully, Welcome back ' + user.name, type: 'verified' });
+                setTimeout(() => navigate('/'), 2500);
             })
             .catch(error => {
                 setAlert({ message: error.message, type: 'report' });

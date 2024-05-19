@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const userSchema = mongoose.Schema({
-    displayName: {
+    name: {
         type: String,
         require: true
     },
@@ -14,11 +14,14 @@ const userSchema = mongoose.Schema({
         type: String,
         require: true
     },
-    photoURL: {
+    avatar: {
         type: String,
         require: true
     },
-    isCurrentUser: Boolean
+    isCurrentUser: {
+        type: Boolean,
+        require: true
+    }
 }, {
     timestamps: true
 });

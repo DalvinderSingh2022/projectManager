@@ -1,12 +1,19 @@
-import React, { useContext } from 'react'
-import { AppContext } from '../App';
+import React, { useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import Loading from './Loading';
+import axios from 'axios';
 
 const Topbar = () => {
-    const { currentUser } = useContext(AppContext);
+    const [currentUser, setCurrentUser] = useState([]);
 
-    if (localStorage.getItem("taskUser") && !currentUser) {
+    useEffect(() => {
+        axios.get("http://localhost:5000/api/users/current")
+            .then(({ data: user }) => {
+                setCurrentUser(user);
+            });
+    }, []);
+
+    if (localStorage.getItem("projectManager") && !currentUser) {
         return <Loading full={true} />
     }
 
@@ -20,10 +27,10 @@ const Topbar = () => {
                 <span className="material-symbols-outlined">drag_handle</span>
             </button>
             <div className="profile flex gap2">
-                <img src={currentUser.user.photoURL} alt={currentUser.user.displayName} loading='lazy' />
+                <img src={currentUser.avatar} alt={currentUser.name} loading='lazy' />
                 <div className=" flex col items-start">
-                    <span className="name">{currentUser.user.displayName}</span>
-                    <span className="email">{currentUser.user.email}</span>
+                    <span className="name">{currentUser.name}</span>
+                    <span className="email">{currentUser.email}</span>
                 </div>
             </div>
         </header>

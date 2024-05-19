@@ -1,89 +1,84 @@
-import React, { memo, useContext, useEffect, useState } from 'react';
-import { doc, setDoc, deleteDoc } from 'firebase/firestore';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { AppContext } from '../App';
 import AlertBox from './AlertBox';
-import { db } from '../firebase';
+import axios from "axios";
 
-const Createtask = ({ uid, title, detail, duedate, assignto, assignby, status, isEdit = false }) => {
-    const { currentUser, dbUsers, updatedb } = useContext(AppContext);
+const Createtask = ({ _id, title, detail, duedate, assignto, assignby, status, isEdit = false }) => {
     const [alert, setAlert] = useState(null);
     const [users, setUsers] = useState([]);
     const [task, setTask] = useState({});
+    const [currentUser, setCurrentUser] = useState([]);
     const navigate = useNavigate();
+
+    useEffect(() => {
+        axios.get("http://localhost:5000/api/users/current")
+            .then(({ data: user }) => {
+                setCurrentUser(user);
+            });
+    }, []);
+
+    useEffect(() => {
+        axios.get("http://localhost:5000/api/users")
+            .then(({ data: users }) => {
+                setUsers(users.filter(user => user._id !== currentUser._id));
+            });
+    }, [currentUser]);
+
+    useEffect(() => setTask({
+        title,
+        detail,
+        duedate,
+        assignto: assignto || users[0]?._id,
+        assignby: assignby || currentUser?._id,
+        status: status || 'pending'
+    }), [title, detail, duedate, assignto, assignby, status, currentUser, users]);
 
     const handlechange = (e) => {
         const name = e.target.name;
         const value = e.target.value;
-        setTask(prev => {
-            return {
-                ...prev,
-                [name]: value,
-                uid: prev?.assignby + ":" + prev?.assignto + ":" + new Date().getTime(),
-            }
-        });
+        setTask(prev => { return { ...prev, [name]: value } });
     }
 
     const handlesubmit = async (e) => {
         e.preventDefault();
-        const database = async () => {
-            if (!task.title || !task.detail || !task.duedate || !task.assignto) {
-                setAlert({ message: "All fields are required can't be null or empty", type: 'report' });
-            } else {
-                setDoc(doc(db, "tasks", task.uid), { ...task })
-                    .then(() => {
-                        setAlert({ message: 'Task ' + title + ' saved', type: 'verified' });
-                        setTimeout(() => {
-                            setTask(prev => ({ ...prev, title: '', detail: '', duedate: '', assignto: '' }));
-                            isEdit ? handledelete() : updatedb(prev => !prev);
-                        }, 1500);
+
+        if (!task.title || !task.detail || !task.duedate || !task.assignto) {
+            setAlert({ message: "All fields are required can't be null or empty", type: 'report' });
+            return;
+        }
+
+        try {
+            if (isEdit) {
+                axios.put(`http://localhost:5000/api/projects/${_id}`, task)
+                    .then(({ data: task }) => {
+                        setTask(prev => ({ ...prev, title: '', detail: '', duedate: '', assignto: '' }));
+                        setAlert({ message: `Changes in ${task.title} saved`, type: 'verified' });
                     })
-                    .catch(error => {
-                        setAlert({ message: error.message, type: 'report' });
-                        console.error(error);
+            } else {
+                axios.post("http://localhost:5000/api/projects", task)
+                    .then(({ data: task }) => {
+                        setTask(prev => ({ ...prev, title: '', detail: '', duedate: '', assignto: '' }));
+                        setAlert({ message: `Task ${task.title} saved`, type: 'verified' });
                     });
             }
-        }
-        database();
+        } catch (error) {
+            setAlert({ message: error.message, type: 'report' });
+            console.error(error);
+        };
     }
 
     const handledelete = () => {
-        const database = async () => {
-            await deleteDoc(doc(db, "tasks", uid))
+        try {
+            axios.delete(`http://localhost:5000/api/projects/${_id}`)
                 .then(() => {
-                    if (!isEdit) { setAlert({ message: 'Task ' + task.title + ' deleted', type: 'warning' }) };
-                    setTimeout(() => {
-                        navigate('/tasks');
-                        updatedb(prev => !prev);
-                    }, 500);
+                    axios.delete(`http://localhost:5000/api/projects/${_id}/comments`)
+                        .then(() => navigate('/tasks'));
                 })
-                .catch(error => {
-                    setAlert({ message: error.message, type: 'report' });
-                    console.error(error);
-                });
-        }
-        database();
+        } catch (error) {
+            setAlert({ message: error.message, type: 'report' });
+            console.error(error);
+        };
     }
-
-    useEffect(() => {
-        const Users = [];
-        dbUsers.forEach(user => {
-            if (user.uid !== currentUser?.user.uid) {
-                Users.push(user);
-            }
-        });
-        setUsers(Users);
-    }, [currentUser, dbUsers]);
-
-    useEffect(() => setTask({
-        uid: uid,
-        title: title,
-        detail: detail,
-        duedate: duedate,
-        assignto: assignto,
-        assignby: assignby || currentUser?.user.uid,
-        status: status || 'pending'
-    }), [uid, title, detail, duedate, assignto, assignby, status, currentUser]);
 
     return (
         <>
@@ -92,7 +87,7 @@ const Createtask = ({ uid, title, detail, duedate, assignto, assignby, status, i
                     <label htmlFor="title">Name</label>
                     <div className="flex gap2 items-strech">
                         <input
-                            disabled={!(currentUser?.user.uid === assignby) && isEdit}
+                            disabled={!(currentUser?._id === assignby) && isEdit}
                             className=' w-full'
                             type="text"
                             id='title'
@@ -101,14 +96,22 @@ const Createtask = ({ uid, title, detail, duedate, assignto, assignby, status, i
                             value={task.title}
                             onChange={(e) => handlechange(e)}
                         />
-                        {(!isEdit || currentUser?.user.uid === assignby || currentUser?.user.uid === assignto) && <button type="submit" className="btn pri round flex material-symbols-outlined">add</button>}
-                        {(currentUser?.user.uid === assignby && isEdit) && <button type="button" className="btn pri round flex material-symbols-outlined" style={{ backgroundColor: 'var(--red)' }} onClick={() => handledelete()}>Delete</button>}
+                        {(!isEdit || currentUser?._id === assignby || currentUser?._id === assignto) &&
+                            <button type="submit" className="btn pri round flex">
+                                Save
+                            </button>
+                        }
+                        {(currentUser?._id === assignby && isEdit) &&
+                            <button type="button" className="btn pri round flex" style={{ backgroundColor: 'var(--red)' }} onClick={handledelete}>
+                                Delete
+                            </button>
+                        }
                     </div>
                 </div>
                 <div className='flex col items-stretch w-full'>
                     <label htmlFor="detail">Detail</label>
                     <textarea
-                        disabled={!(currentUser?.user.uid === assignby) && isEdit}
+                        disabled={!(currentUser?._id === assignby) && isEdit}
                         rows={6}
                         type="text"
                         id='detail'
@@ -118,7 +121,8 @@ const Createtask = ({ uid, title, detail, duedate, assignto, assignby, status, i
                         onChange={(e) => handlechange(e)}
                     />
                 </div>
-                {(currentUser?.user.uid === assignby || currentUser?.user.uid === assignto) &&
+
+                {(currentUser?._id === assignby || currentUser?._id === assignto) &&
                     <div className='flex col items-stretch'>
                         <label htmlFor="assign">Status</label>
                         <select
@@ -130,27 +134,28 @@ const Createtask = ({ uid, title, detail, duedate, assignto, assignby, status, i
                             <option value="pending">Pending</option>
                         </select>
                     </div>}
+
                 <div className="flex gap items-stretch">
                     <div className='flex col items-stretch '>
                         <label htmlFor="duedate">Due Date</label>
                         <input
-                            disabled={!(currentUser?.user.uid === assignby) && isEdit}
+                            disabled={!(currentUser?._id === assignby) && isEdit}
                             type="date"
                             id='dueate'
                             name='duedate'
-                            value={task.duedate}
+                            value={new Date(task.duedate || new Date()).toISOString().split("T")[0]}
                             onChange={(e) => handlechange(e)}
                         />
                     </div>
                     <div className='flex col items-stretch w-full'>
                         <label htmlFor="assign">Assign to</label>
                         <select
-                            disabled={!(currentUser?.user.uid === assignby) && isEdit}
+                            disabled={!(currentUser?._id === assignby) && isEdit}
                             name="assignto"
                             id="assign"
                             value={task.assignto}
                             onChange={(e) => handlechange(e)}>
-                            {users && users.map(user => <option key={user.uid} value={user.uid}>{user.displayName}</option>)}
+                            {users && users.map(user => <option key={user._id} value={user._id}>{user.name}</option>)}
                         </select>
                     </div>
                 </div>
@@ -160,4 +165,4 @@ const Createtask = ({ uid, title, detail, duedate, assignto, assignby, status, i
     )
 }
 
-export default memo(Createtask);
+export default Createtask;

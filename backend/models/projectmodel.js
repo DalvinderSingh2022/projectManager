@@ -5,8 +5,14 @@ const projectSchema = mongoose.Schema({
         type: String,
         require: true
     },
-    detail: String,
-    duedate: Date,
+    detail: {
+        type: String,
+        require: true
+    },
+    duedate: {
+        type: Date,
+        require: true
+    },
     assignto: {
         type: String,
         require: true
@@ -18,8 +24,9 @@ const projectSchema = mongoose.Schema({
     status: {
         type: String,
         require: true
-    },
-    commentCount: Number
+    }
+}, {
+    timestamps: true
 });
 
 module.exports = mongoose.model("Project", projectSchema);

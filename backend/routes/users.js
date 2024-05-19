@@ -6,7 +6,7 @@ const User = require("../models/usersmodel");
 router.get('/api/users', async (req, res) => {
     const filter = {};
     if (req.query?.name) {
-        filter.displayName = req.query.name;
+        filter.name = req.query.name;
     }
     const users = await User.find(filter);
 
@@ -15,6 +15,12 @@ router.get('/api/users', async (req, res) => {
     }
 
     res.status(200).json(users);
+});
+
+router.get('/api/users/current', async (req, res) => {
+    const user = await User.findOne({ isCurrentUser: true });
+
+    res.status(200).json(user);
 });
 
 router.get('/api/users/:id', async (req, res) => {
@@ -27,11 +33,6 @@ router.get('/api/users/:id', async (req, res) => {
     res.status(200).json(user);
 });
 
-router.put('/api/users/current', async (req, res) => {
-    const user = await User.findOne({ isCurrentUser: true });
-
-    res.status(200).json(user);
-});
 
 router.post('/api/users/register', async (req, res) => {
     const { name, email, password, avatar } = req.body;
@@ -40,7 +41,7 @@ router.post('/api/users/register', async (req, res) => {
         res.status(400).json({ message: "" });
     }
 
-    const emailAvailable = await User.findOne(email);
+    const emailAvailable = await User.findOne({ email });
     if (!emailAvailable) {
         res.status(200).json({ message: "User email already registered" });
     }
@@ -50,7 +51,7 @@ router.post('/api/users/register', async (req, res) => {
         res.status(400).json({ message: "Can`t fetch users from Database" });
     }
 
-    res.status(200).json(user);
+    res.status(200).json({ message: "hello" });
 });
 
 
@@ -61,12 +62,12 @@ router.put('/api/users/login', async (req, res) => {
         res.status(400).json({ message: "" });
     }
 
-    const user = await User.findOne(email);
+    const user = await User.findOne({ email });
     if (!user) {
         res.status(200).json({ message: "User not found" });
     }
 
-    const updatedUser = await Project.findByIdAndUpdate(
+    const updatedUser = await User.findByIdAndUpdate(
         user.id,
         { isCurrentUser: true },
         { new: true }
@@ -78,7 +79,7 @@ router.put('/api/users/login', async (req, res) => {
 router.put('/api/users/logout', async (req, res) => {
     const user = await User.findOne({ isCurrentUser: true });
 
-    const updatedUser = await Project.findByIdAndUpdate(
+    const updatedUser = await User.findByIdAndUpdate(
         user.id,
         { isCurrentUser: false },
         { new: true }

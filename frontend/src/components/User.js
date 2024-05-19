@@ -1,29 +1,24 @@
-import React, { memo, useContext, useEffect, useState } from 'react'
-import { AppContext } from '../App';
+import axios from 'axios';
+import React, { memo, useEffect, useState } from 'react';
 
-const User = ({ displayName, photoURL, uid }) => {
-    const { dbTasks } = useContext(AppContext)
+const User = ({ name, avatar, _id }) => {
     const [tasks, setTasks] = useState(0);
 
     useEffect(() => {
-        const Tasks = [];
-        dbTasks.forEach(task => {
-            if (task.uid.includes(uid)) {
-                Tasks.push(task);
-            }
-        });
-        setTasks(Tasks.length);
-    }, [dbTasks, uid])
+        axios.get(`http://localhost:5000/api/projects?userId=${_id}&assignto=true&status=pending`)
+            .then(({ data: task }) => {
+                setTasks(task.length);
+            });
+    }, [_id])
 
     return (
         <div className="user flex gap2 col items-stretch">
             <div className="flex">
-                <img src={photoURL} alt={displayName} loading='lazy' />
-                {/* <button className='btn round material-symbols-outlined' title='Permote to Admin'>stars<span></span></button> */}
+                <img src={avatar} alt={name} loading='lazy' />
             </div>
             <div className="flex items-start j-start col">
-                <span className="name">{displayName}</span>
-                <span className="taskscount">Tasks: {tasks}</span>
+                <span className="name">{name}</span>
+                <span className="taskscount">Pending : {tasks}</span>
             </div>
         </div>
     )

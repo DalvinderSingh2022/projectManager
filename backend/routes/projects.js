@@ -8,6 +8,12 @@ router.get('/api/projects', async (req, res) => {
     if (req.query?.status) {
         filter.status = req.query.status;
     }
+    if (req.query?.userId && req.query?.assignto) {
+        filter.assignto = req.query.userId;
+    }
+    if (req.query?.userId && req.query?.assignby) {
+        filter.assignby = req.query.userId;
+    }
     const projects = await Project.find(filter);
 
     if (!projects) {
@@ -44,13 +50,12 @@ router.get('/api/projects/:id', async (req, res) => {
 });
 
 router.delete('/api/projects/:id', async (req, res) => {
-    const project = await Project.findById(req.params.id);
+    const project = await Project.deleteOne({ _id: req.params.id });
 
     if (!project) {
         res.status(404).json({ message: "Project not found" });
     }
 
-    await Project.remove();
     res.status(200).json(project);
 });
 

@@ -243,10 +243,26 @@ header .home.btn {
 }
 
 nav .logo {
-    font-family: 'Pacifico', cursive;
-    font-size: 2em;
+    font-size: 2.4em;
     color: var(--primary);
     overflow: hidden;
+    text-align: center;
+    font-weight: bold;
+    padding: .9em .4em 0 .4em;
+    position: relative;
+}
+
+nav .logo::before {
+    content: 'Project';
+    text-align: left;
+    font-size: 1.4em;
+    font-family: 'Pacifico', cursive;
+    position: absolute;
+    line-height: 1em;
+    color: rgba(71, 91, 232, .3);
+    letter-spacing: 6px;
+    left: 0;
+    top: 0;
 }
 
 nav .link {

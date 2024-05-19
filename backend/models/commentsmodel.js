@@ -5,11 +5,11 @@ const commentSchema = mongoose.Schema({
         type: String,
         require: true
     },
-    project: {
+    projectId: {
         type: String,
         require: true
     },
-    by: {
+    userName: {
         type: String,
         require: true
     }

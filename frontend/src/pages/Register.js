@@ -1,21 +1,27 @@
-import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
-import React, { useContext, useState } from 'react';
-import { AppContext } from '../App';
-import { auth, db } from '../firebase';
+import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { doc, setDoc } from "firebase/firestore";
 import AlertBox from '../components/AlertBox';
+import axios from "axios";
+
+const avatars = [
+    'https://img.freepik.com/premium-vector/young-smiling-man-avatar-man-with-brown-beard-mustache-hair-wearing-yellow-sweater-sweatshirt-3d-vector-people-character-illustration-cartoon-minimal-style_365941-860.jpg?w=740',
+    'https://img.freepik.com/premium-vector/senior-man-avatar-smiling-elderly-man-with-beard-with-gray-hair-3d-vector-people-character-illustration-cartoon-minimal-style_365941-810.jpg',
+    'https://img.freepik.com/premium-vector/young-smiling-man-adam-avatar-3d-vector-people-character-illustration-cartoon-minimal-style_365941-687.jpg',
+    'https://img.freepik.com/premium-vector/young-man-working-laptop-computer-having-idea-freelance-job-creativity-innovation-business-idea-concept-3d-vector-people-character-illustration-cartoon-minimal-style_365941-795.jpg',
+    'https://img.freepik.com/premium-vector/happy-young-woman-watching-into-rounded-frame-isolated-white-illustration-render-style_365941-118.jpg',
+    'https://img.freepik.com/premium-vector/young-smiling-woman-mia-avatar-3d-vector-people-character-illustration-cartoon-minimal-style_365941-792.jpg',
+    'https://img.freepik.com/premium-vector/3d-vector-young-smiling-woman-with-light-sin-tone-brown-short-hair-user-avatar_624031-153.jpg',
+    'https://img.freepik.com/premium-vector/young-smiling-woman-jane-peeking-out-looking-from-round-hole-searching-concept-3d-vector-people-character-illustrationcartoon-minimal-style_365941-739.jpg'
+]
 
 const SignIn = () => {
-    const { setcurrentUser } = useContext(AppContext);
     const [alert, setAlert] = useState(null);
     const navigate = useNavigate();
     const [user, setUser] = useState({
-        displayName: null,
+        name: null,
         email: null,
         password: null,
-        photoURL: null,
-        uid: null,
+        avatar: avatars[0],
     });
 
     const handlechange = (e) => {
@@ -24,19 +30,12 @@ const SignIn = () => {
         setUser(prev => ({ ...prev, [name]: value }));
     }
 
-    const handlesubmit = (e) => {
+    const handlesubmit = async (e) => {
         e.preventDefault();
-        createUserWithEmailAndPassword(auth, user.email, user.password)
-            .then(userInfo => {
-                user.uid = userInfo.user.uid;
-                updateProfile(auth.currentUser, { displayName: user.displayName, photoURL: user.photoURL });
-                setDoc(doc(db, "users", userInfo.user.uid), { ...user });
-                localStorage.setItem("taskUser", JSON.stringify(userInfo));
-                setAlert({ message: 'Registered successfully, Welcome ' + user.displayName, type: 'verified' });
-                setTimeout(() => {
-                    setcurrentUser(userInfo);
-                    navigate('/');
-                }, 2500)
+        axios.post("http://localhost:5000/api/users/register", user)
+            .then(({ data: user }) => {
+                setAlert({ message: 'Registered successfully, Welcome ' + user.name, type: 'verified' });
+                setTimeout(() => navigate('/'), 2500);
             })
             .catch(error => {
                 setAlert({ message: error.message, type: 'report' });
@@ -54,19 +53,8 @@ const SignIn = () => {
                 img.classList.remove('select');
             }
         });
-        setUser(prev => ({ ...prev, photoURL: avatars[index] }));
+        setUser(prev => ({ ...prev, avatar: avatars[index] }));
     }
-
-    const avatars = [
-        'https://img.freepik.com/premium-vector/young-smiling-man-avatar-man-with-brown-beard-mustache-hair-wearing-yellow-sweater-sweatshirt-3d-vector-people-character-illustration-cartoon-minimal-style_365941-860.jpg?w=740',
-        'https://img.freepik.com/premium-vector/senior-man-avatar-smiling-elderly-man-with-beard-with-gray-hair-3d-vector-people-character-illustration-cartoon-minimal-style_365941-810.jpg',
-        'https://img.freepik.com/premium-vector/young-smiling-man-adam-avatar-3d-vector-people-character-illustration-cartoon-minimal-style_365941-687.jpg',
-        'https://img.freepik.com/premium-vector/young-man-working-laptop-computer-having-idea-freelance-job-creativity-innovation-business-idea-concept-3d-vector-people-character-illustration-cartoon-minimal-style_365941-795.jpg',
-        'https://img.freepik.com/premium-vector/happy-young-woman-watching-into-rounded-frame-isolated-white-illustration-render-style_365941-118.jpg',
-        'https://img.freepik.com/premium-vector/young-smiling-woman-mia-avatar-3d-vector-people-character-illustration-cartoon-minimal-style_365941-792.jpg',
-        'https://img.freepik.com/premium-vector/3d-vector-young-smiling-woman-with-light-sin-tone-brown-short-hair-user-avatar_624031-153.jpg',
-        'https://img.freepik.com/premium-vector/young-smiling-woman-jane-peeking-out-looking-from-round-hole-searching-concept-3d-vector-people-character-illustrationcartoon-minimal-style_365941-739.jpg'
-    ]
 
     return (
         <>
@@ -84,13 +72,13 @@ const SignIn = () => {
                             </div>
                         </div>
                         <div className='flex col items-stretch w-full'>
-                            <label htmlFor="displayName">Name</label>
+                            <label htmlFor="name">Name</label>
                             <input
                                 type="text"
-                                id='displayName'
-                                name='displayName'
+                                id='name'
+                                name='name'
                                 placeholder='Enter your name'
-                                value={user.displayName || ''}
+                                value={user.name || ''}
                                 onChange={(e) => handlechange(e)} />
                         </div>
                         <div className='flex col items-stretch w-full'>
