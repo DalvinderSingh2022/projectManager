@@ -24,9 +24,9 @@ const Login = () => {
                 setAlert({ message: 'Logged In successfully, Welcome back ' + user.name, type: 'verified' });
                 setTimeout(() => navigate('/'), 2500);
             })
-            .catch(error => {
-                setAlert({ message: error.message, type: 'report' });
+            .catch((error) => {
                 console.error(error);
+                setAlert({ message: error.response.data.message, type: 'report' });
             });
     }
 

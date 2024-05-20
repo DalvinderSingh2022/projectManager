@@ -37,9 +37,9 @@ const SignIn = () => {
                 setAlert({ message: 'Registered successfully, Welcome ' + user.name, type: 'verified' });
                 setTimeout(() => navigate('/'), 2500);
             })
-            .catch(error => {
-                setAlert({ message: error.message, type: 'report' });
-                console.error(error)
+            .catch((error) => {
+                console.error(error);
+                setAlert({ message: error.response.data.message, type: 'report' });
             });
     }
 

@@ -13,9 +13,9 @@ const Sidebar = () => {
             .then(() => {
                 setAlert({ message: 'Logged out successfully', type: 'verified' });
             })
-            .catch(error => {
-                setAlert({ message: error.message, type: 'report' });
+            .catch((error) => {
                 console.error(error);
+                setAlert({ message: error.response.data.message, type: 'report' });
             });
         navigate('/login');
     }

@@ -1,28 +1,37 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import Createtask from '../components/Createtask';
 import Loading from '../components/Loading';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import AlertBox from '../components/AlertBox';
 
 const Dashboard = () => {
+    const [alert, setAlert] = useState(null);
     const navigate = useNavigate();
     const [tasks, setTasks] = useState([]);
     const [currentUser, setCurrentUser] = useState([]);
+
+    const loadTasks = useCallback(() => {
+        axios.get(`http://localhost:5000/api/projects?userId=${currentUser._id}&assignto=true`)
+            .then(({ data: task }) => {
+                setTasks(prev => [...prev, ...task]);
+            });
+        axios.get(`http://localhost:5000/api/projects?userId=${currentUser._id}&assignby=true`)
+            .then(({ data: task }) => {
+                setTasks(prev => [...prev, ...task]);
+            });
+    }, [currentUser._id]);
 
     useEffect(() => {
         axios.get("http://localhost:5000/api/users/current")
             .then(({ data: user }) => {
                 setCurrentUser(user);
-                axios.get(`http://localhost:5000/api/projects?userId=${user._id}&assignto=true`)
-                    .then(({ data: task }) => {
-                        setTasks(prev => [...prev, ...task]);
-                    });
-                axios.get(`http://localhost:5000/api/projects?userId=${user._id}&assignby=true`)
-                    .then(({ data: task }) => {
-                        setTasks(prev => [...prev, ...task]);
-                    });
+                loadTasks();
+            }).catch((error) => {
+                console.error(error);
+                setAlert({ message: error.response.data.message, type: 'report' });
             });
-    }, []);
+    }, [loadTasks]);
 
     return (
         <>
@@ -48,7 +57,7 @@ const Dashboard = () => {
             <div className="container">
                 <section className='flex col gap2 items-start'>
                     <div className="heading">Create Task</div>
-                    <Createtask />
+                    <Createtask callback={loadTasks} />
                 </section>
                 <section className='flex col j-start items-stretch gap2'>
                     <div className="heading">Tasks</div>
@@ -66,6 +75,7 @@ const Dashboard = () => {
                     </div>
                 </section >
             </div >
+            {alert && <AlertBox {...alert} setAlert={setAlert} />}
         </>
     )
 }

@@ -14,10 +14,10 @@ router.get('/api/projects', async (req, res) => {
     if (req.query?.userId && req.query?.assignby) {
         filter.assignby = req.query.userId;
     }
-    const projects = await Project.find(filter);
+    const projects = await Project.find(filter).sort({ duedate: "asc" });
 
     if (!projects) {
-        res.status(400).json({ message: "Can`t fetch projects from Database" });
+        return res.status(404).json({ message: "Porject wiht provided id not found" });
     }
 
     res.status(200).json(projects);
@@ -28,42 +28,42 @@ router.post('/api/projects', async (req, res) => {
     const status = req.body?.status || 'pending';
 
     if (!title || !detail || !duedate || !assignto) {
-        res.status(400).json({ message: "" });
+        return res.status(400).json({ message: "All fields are required" });
     }
 
     const project = await Project.create({ title, detail, duedate, assignto, assignby, status });
     if (!project) {
-        res.status(400).json({ message: "Can`t fetch users from Database" });
+        return res.status(400).json({ message: "Invalid project id provided" });
     }
 
-    res.status(200).json(project);
+    return res.status(201).json(project);
 });
 
 router.get('/api/projects/:id', async (req, res) => {
     const project = await Project.findById(req.params.id);
 
     if (!project) {
-        res.status(404).json({ message: "Project not found" });
+        return res.status(400).json({ message: "Invalid comments id provided" });
     }
 
-    res.status(200).json(project);
+    return res.status(200).json(project);
 });
 
 router.delete('/api/projects/:id', async (req, res) => {
     const project = await Project.deleteOne({ _id: req.params.id });
 
     if (!project) {
-        res.status(404).json({ message: "Project not found" });
+        return res.status(400).json({ message: "Invalid comments id provided" });
     }
 
-    res.status(200).json(project);
+    return res.status(201).json(project);
 });
 
 router.put('/api/projects/:id', async (req, res) => {
     const project = await Project.findById(req.params.id);
 
     if (!project) {
-        res.status(404).json({ message: "Project not found" });
+        return res.status(400).json({ message: "Invalid comments id provided" });
     }
 
     const updatedProject = await Project.findByIdAndUpdate(
@@ -72,7 +72,7 @@ router.put('/api/projects/:id', async (req, res) => {
         { new: true }
     );
 
-    res.status(200).json(updatedProject);
+    return res.status(200).json(updatedProject);
 });
 
 

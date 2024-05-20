@@ -36,7 +36,7 @@ const Edittask = () => {
 
     const handlesubmit = () => {
         if (!comment.comment) {
-            setAlert({ message: "Comment can't be null or empty", type: 'report' });
+            setAlert({ message: "Comment can't be empty", type: 'report' });
         } else {
             axios.post(`http://localhost:5000/api/projects/${id}/comments`, comment)
                 .then(() => {
@@ -45,9 +45,9 @@ const Edittask = () => {
                     setcomment(prev => ({ ...prev, comment: '' }));
                     loadComments();
                 })
-                .catch(error => {
-                    setAlert({ message: error.message, type: 'report' });
+                .catch((error) => {
                     console.error(error);
+                    setAlert({ message: error.response.data.message, type: 'report' });
                 });
         }
     }

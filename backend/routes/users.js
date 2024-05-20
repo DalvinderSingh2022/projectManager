@@ -8,29 +8,33 @@ router.get('/api/users', async (req, res) => {
     if (req.query?.name) {
         filter.name = req.query.name;
     }
-    const users = await User.find(filter);
+    const users = await User.find(filter).sort({ name: 'asc' });
 
     if (!users) {
-        res.status(400).json({ message: "Can`t fetch users from Database" });
+        return res.status(400).json({ message: "Invalid user id provided" });
     }
 
-    res.status(200).json(users);
+    return res.status(200).json(users);
 });
 
 router.get('/api/users/current', async (req, res) => {
     const user = await User.findOne({ isCurrentUser: true });
 
-    res.status(200).json(user);
+    if (!user) {
+        return res.status(400).json({ message: "no user currently signedin" });
+    }
+
+    return res.status(200).json(user);
 });
 
 router.get('/api/users/:id', async (req, res) => {
     const user = await User.findById(req.params.id);
 
     if (!user) {
-        res.status(404).json({ message: "User not found" });
+        return res.status(400).json({ message: "Invalid user id provided" });
     }
 
-    res.status(200).json(user);
+    return res.status(200).json(user);
 });
 
 
@@ -38,20 +42,17 @@ router.post('/api/users/register', async (req, res) => {
     const { name, email, password, avatar } = req.body;
 
     if (!name || !email || !password || !avatar) {
-        res.status(400).json({ message: "" });
+        return res.status(400).json({ message: "All fields are required" });
     }
 
     const emailAvailable = await User.findOne({ email });
-    if (!emailAvailable) {
-        res.status(200).json({ message: "User email already registered" });
+    if (emailAvailable) {
+        return res.status(400).json({ message: "provided email already registered" });
     }
 
     const user = await User.create({ name, email, password, avatar, isCurrentUser: true });
-    if (!user) {
-        res.status(400).json({ message: "Can`t fetch users from Database" });
-    }
 
-    res.status(200).json({ message: "hello" });
+    return res.status(201).json(user);
 });
 
 
@@ -59,12 +60,15 @@ router.put('/api/users/login', async (req, res) => {
     const { email, password } = req.body;
 
     if (!email || !password) {
-        res.status(400).json({ message: "" });
+        return res.status(400).json({ message: "All fields are required" });
     }
 
     const user = await User.findOne({ email });
     if (!user) {
-        res.status(200).json({ message: "User not found" });
+        return res.status(400).json({ message: "email provided is not registered" });
+    }
+    else if (user.password !== password) {
+        return res.status(400).json({ message: "Incorrect password" });
     }
 
     const updatedUser = await User.findByIdAndUpdate(
@@ -73,7 +77,7 @@ router.put('/api/users/login', async (req, res) => {
         { new: true }
     );
 
-    res.status(200).json(updatedUser);
+    return res.status(200).json(updatedUser);
 });
 
 router.put('/api/users/logout', async (req, res) => {
@@ -85,7 +89,7 @@ router.put('/api/users/logout', async (req, res) => {
         { new: true }
     );
 
-    res.status(200).json(updatedUser);
+    return res.status(200).json(updatedUser);
 });
 
 module.exports = router;

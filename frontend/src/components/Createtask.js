@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import AlertBox from './AlertBox';
 import axios from "axios";
 
-const Createtask = ({ _id, title, detail, duedate, assignto, assignby, status, isEdit = false }) => {
+const Createtask = ({ callback, _id, title, detail, duedate, assignto, assignby, status, isEdit = false }) => {
     const [alert, setAlert] = useState(null);
     const [users, setUsers] = useState([]);
     const [task, setTask] = useState({});
@@ -27,7 +27,7 @@ const Createtask = ({ _id, title, detail, duedate, assignto, assignby, status, i
     useEffect(() => setTask({
         title,
         detail,
-        duedate,
+        duedate: duedate || new Date().toISOString(),
         assignto: assignto || users[0]?._id,
         assignby: assignby || currentUser?._id,
         status: status || 'pending'
@@ -42,41 +42,42 @@ const Createtask = ({ _id, title, detail, duedate, assignto, assignby, status, i
     const handlesubmit = async (e) => {
         e.preventDefault();
 
-        if (!task.title || !task.detail || !task.duedate || !task.assignto) {
-            setAlert({ message: "All fields are required can't be null or empty", type: 'report' });
+        if (!isEdit) {
+            axios.post("http://localhost:5000/api/projects", task)
+                .then(({ data: task }) => {
+                    setTask(prev => ({ ...prev, title: '', detail: '', duedate: '', assignto: '' }));
+                    setAlert({ message: `Task ${task.title} saved`, type: 'verified' });
+                    callback();
+                })
+                .catch((error) => {
+                    console.error(error);
+                    setAlert({ message: error.response.data.message, type: 'report' });
+                });
             return;
         }
 
-        try {
-            if (isEdit) {
-                axios.put(`http://localhost:5000/api/projects/${_id}`, task)
-                    .then(({ data: task }) => {
-                        setTask(prev => ({ ...prev, title: '', detail: '', duedate: '', assignto: '' }));
-                        setAlert({ message: `Changes in ${task.title} saved`, type: 'verified' });
-                    })
-            } else {
-                axios.post("http://localhost:5000/api/projects", task)
-                    .then(({ data: task }) => {
-                        setTask(prev => ({ ...prev, title: '', detail: '', duedate: '', assignto: '' }));
-                        setAlert({ message: `Task ${task.title} saved`, type: 'verified' });
-                    });
-            }
-        } catch (error) {
-            setAlert({ message: error.message, type: 'report' });
-            console.error(error);
-        };
+        axios.put(`http://localhost:5000/api/projects/${_id}`, task)
+            .then(({ data: task }) => {
+                setTask(prev => ({ ...prev, title: '', detail: '', duedate: '', assignto: '' }));
+                setAlert({ message: `Changes in ${task.title} saved`, type: 'verified' });
+                callback();
+            })
+            .catch((error) => {
+                console.error(error);
+                setAlert({ message: error.response.data.message, type: 'report' });
+            });
     }
 
-    const handledelete = () => {
+    const handledelete = async () => {
         try {
-            axios.delete(`http://localhost:5000/api/projects/${_id}`)
-                .then(() => {
-                    axios.delete(`http://localhost:5000/api/projects/${_id}/comments`)
+            await axios.delete(`http://localhost:5000/api/projects/${_id}`)
+                .then(async () => {
+                    await axios.delete(`http://localhost:5000/api/projects/${_id}/comments`)
                         .then(() => navigate('/tasks'));
                 })
         } catch (error) {
-            setAlert({ message: error.message, type: 'report' });
             console.error(error);
+            setAlert({ message: error.response.data.message, type: 'report' });
         };
     }
 
