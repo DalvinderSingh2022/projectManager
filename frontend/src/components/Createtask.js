@@ -41,7 +41,7 @@ const Createtask = ({ callback, _id, title, detail, duedate, assignto, assignby,
                 .then(({ data: task }) => {
                     setTask(prev => ({ ...prev, title: '', detail: '', duedate: '', assignto: '' }));
                     setAlert({ message: `Task ${task.title} saved`, type: 'verified' });
-                    callback();
+                    if (callback) callback();
                 })
                 .catch((error) => {
                     console.error(error);
@@ -54,7 +54,7 @@ const Createtask = ({ callback, _id, title, detail, duedate, assignto, assignby,
             .then(({ data: task }) => {
                 setTask(prev => ({ ...prev, title: '', detail: '', duedate: '', assignto: '' }));
                 setAlert({ message: `Changes in ${task.title} saved`, type: 'verified' });
-                callback();
+                if (callback) callback();
             })
             .catch((error) => {
                 console.error(error);
@@ -150,6 +150,7 @@ const Createtask = ({ callback, _id, title, detail, duedate, assignto, assignby,
                             id="assign"
                             value={task.assignto}
                             onChange={(e) => handlechange(e)}>
+                            {(currentUser._id === task.assignto) && <option value={currentUser._id}>{currentUser.name}</option>}
                             {users && users.map(user => <option key={user._id} value={user._id}>{user.name}</option>)}
                         </select>
                     </div>
