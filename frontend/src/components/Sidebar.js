@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import AlertBox from './AlertBox';
-import axios from 'axios';
 
 const Sidebar = () => {
     const [alert, setAlert] = useState(null);
@@ -9,14 +8,7 @@ const Sidebar = () => {
     const btnsRef = useRef();
 
     const handleclick = () => {
-        axios.put("http://localhost:5000/api/users/logout")
-            .then(() => {
-                setAlert({ message: 'Logged out successfully', type: 'verified' });
-            })
-            .catch((error) => {
-                console.error(error);
-                setAlert({ message: error.response.data.message, type: 'report' });
-            });
+        localStorage.removeItem("token");
         navigate('/login');
     }
 

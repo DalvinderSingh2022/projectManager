@@ -17,10 +17,6 @@ const userSchema = mongoose.Schema({
     avatar: {
         type: String,
         require: true
-    },
-    isCurrentUser: {
-        type: Boolean,
-        require: true
     }
 }, {
     timestamps: true

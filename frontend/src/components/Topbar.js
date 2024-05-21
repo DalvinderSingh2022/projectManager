@@ -1,24 +1,26 @@
-import React, { useEffect, useState } from 'react';
-import { Navigate } from 'react-router-dom';
-import Loading from './Loading';
+import React, { useContext, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import Loading from "./Loading";
 import axios from 'axios';
+import { AppContext } from '../App';
 
 const Topbar = () => {
-    const [currentUser, setCurrentUser] = useState([]);
+    const { currentUser, setCurrentUser } = useContext(AppContext);
+    const navigate = useNavigate();
 
     useEffect(() => {
-        axios.get("http://localhost:5000/api/users/current")
-            .then(({ data: user }) => {
-                setCurrentUser(user);
-            });
-    }, []);
+        axios.get("http://localhost:5000/api/users/current", {
+            headers: {
+                Authorization: localStorage.getItem("token")
+            }
+        })
+            .then(({ data: user }) => setCurrentUser(user))
+            .catch(() => navigate("/login"));
 
-    if (localStorage.getItem("projectManager") && !currentUser) {
-        return <Loading full={true} />
-    }
+    }, [navigate, setCurrentUser]);
 
     if (!currentUser) {
-        return <Navigate to='/login' />
+        return <Loading full={true} />
     }
 
     return (

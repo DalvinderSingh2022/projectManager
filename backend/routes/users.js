@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const jwt = require("jsonwebtoken");
 
 const User = require("../models/usersmodel");
 
@@ -18,10 +19,16 @@ router.get('/api/users', async (req, res) => {
 });
 
 router.get('/api/users/current', async (req, res) => {
-    const user = await User.findOne({ isCurrentUser: true });
+    const token = req.headers?.Authorization || req.headers?.authorization;
+
+    if (!token) {
+        return res.status(401).json({ message: "User is not authorized or token is missing" });
+    }
+
+    const user = jwt.verify(token, process.env.ACCESS_TOKEN);
 
     if (!user) {
-        return res.status(400).json({ message: "no user currently signedin" });
+        return res.status(401).json({ message: "User is not authorized" });
     }
 
     return res.status(200).json(user);
@@ -50,9 +57,17 @@ router.post('/api/users/register', async (req, res) => {
         return res.status(400).json({ message: "provided email already registered" });
     }
 
-    const user = await User.create({ name, email, password, avatar, isCurrentUser: true });
+    const user = await User.create({ name, email, password, avatar });
 
-    return res.status(201).json(user);
+    const token = jwt.sign({
+        email,
+        name,
+        avatar,
+        _id: user._id,
+    }, process.env.ACCESS_TOKEN)
+    res.cookie("token", token);
+
+    return res.status(201).json({ user, token });
 });
 
 
@@ -71,25 +86,14 @@ router.put('/api/users/login', async (req, res) => {
         return res.status(400).json({ message: "Incorrect password" });
     }
 
-    const updatedUser = await User.findByIdAndUpdate(
-        user.id,
-        { isCurrentUser: true },
-        { new: true }
-    );
+    const token = jwt.sign({
+        email,
+        name: user.name,
+        avatar: user.avatar,
+        _id: user._id
+    }, process.env.ACCESS_TOKEN);
 
-    return res.status(200).json(updatedUser);
-});
-
-router.put('/api/users/logout', async (req, res) => {
-    const user = await User.findOne({ isCurrentUser: true });
-
-    const updatedUser = await User.findByIdAndUpdate(
-        user.id,
-        { isCurrentUser: false },
-        { new: true }
-    );
-
-    return res.status(200).json(updatedUser);
+    return res.status(200).json({ user, token });
 });
 
 module.exports = router;

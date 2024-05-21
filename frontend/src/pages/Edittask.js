@@ -1,8 +1,9 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import Createtask from '../components/Createtask';
 import { useParams } from 'react-router-dom';
 import AlertBox from '../components/AlertBox';
 import axios from "axios";
+import { AppContext } from '../App';
 
 const Edittask = () => {
     const [addComment, setaddComment] = useState(false);
@@ -10,6 +11,7 @@ const Edittask = () => {
     const [task, setTask] = useState({});
     const [comments, setComments] = useState([]);
     const { id } = useParams();
+    const { currentUser } = useContext(AppContext);
     const [comment, setcomment] = useState({
         comment: '',
         userName: ''
@@ -27,12 +29,9 @@ const Edittask = () => {
             .then(({ data: tasks }) => {
                 setTask(tasks);
             });
-        axios.get("http://localhost:5000/api/users/current")
-            .then(({ data: user }) => {
-                setcomment(prev => ({ ...prev, userName: user.name }));
-            });
+        setcomment(prev => ({ ...prev, userName: currentUser.name }));
         loadComments();
-    }, [id, loadComments]);
+    }, [id, loadComments, currentUser.name]);
 
     const handlesubmit = () => {
         if (!comment.comment) {

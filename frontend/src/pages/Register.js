@@ -33,9 +33,10 @@ const SignIn = () => {
     const handlesubmit = async (e) => {
         e.preventDefault();
         axios.post("http://localhost:5000/api/users/register", user)
-            .then(({ data: user }) => {
-                setAlert({ message: 'Registered successfully, Welcome ' + user.name, type: 'verified' });
+            .then(({ data }) => {
+                setAlert({ message: 'Registered successfully, Welcome ' + data.user.name, type: 'verified' });
                 setTimeout(() => navigate('/'), 2500);
+                localStorage.setItem("token", data.token);
             })
             .catch((error) => {
                 console.error(error);

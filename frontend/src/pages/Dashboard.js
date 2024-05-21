@@ -1,15 +1,16 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import Createtask from '../components/Createtask';
 import Loading from '../components/Loading';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import AlertBox from '../components/AlertBox';
+import { AppContext } from '../App';
 
 const Dashboard = () => {
     const [alert, setAlert] = useState(null);
     const navigate = useNavigate();
     const [tasks, setTasks] = useState([]);
-    const [currentUser, setCurrentUser] = useState([]);
+    const { currentUser } = useContext(AppContext);
 
     const loadTasks = useCallback(() => {
         axios.get(`http://localhost:5000/api/projects?userId=${currentUser._id}&assignto=true`)
@@ -22,16 +23,7 @@ const Dashboard = () => {
             });
     }, [currentUser._id]);
 
-    useEffect(() => {
-        axios.get("http://localhost:5000/api/users/current")
-            .then(({ data: user }) => {
-                setCurrentUser(user);
-                loadTasks();
-            }).catch((error) => {
-                console.error(error);
-                setAlert({ message: error.response.data.message, type: 'report' });
-            });
-    }, [loadTasks]);
+    useEffect(() => loadTasks(), [loadTasks]);
 
     return (
         <>

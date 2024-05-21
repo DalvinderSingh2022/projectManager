@@ -1,21 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AlertBox from './AlertBox';
 import axios from "axios";
+import { AppContext } from '../App';
 
 const Createtask = ({ callback, _id, title, detail, duedate, assignto, assignby, status, isEdit = false }) => {
     const [alert, setAlert] = useState(null);
     const [users, setUsers] = useState([]);
     const [task, setTask] = useState({});
-    const [currentUser, setCurrentUser] = useState([]);
+    const { currentUser } = useContext(AppContext);
     const navigate = useNavigate();
-
-    useEffect(() => {
-        axios.get("http://localhost:5000/api/users/current")
-            .then(({ data: user }) => {
-                setCurrentUser(user);
-            });
-    }, []);
 
     useEffect(() => {
         axios.get("http://localhost:5000/api/users")

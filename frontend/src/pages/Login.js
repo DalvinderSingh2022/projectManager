@@ -20,9 +20,10 @@ const Login = () => {
     const handlesubmit = (e) => {
         e.preventDefault();
         axios.put("http://localhost:5000/api/users/login", user)
-            .then(({ data: user }) => {
-                setAlert({ message: 'Logged In successfully, Welcome back ' + user.name, type: 'verified' });
+            .then(({ data }) => {
+                setAlert({ message: 'Logged In successfully, Welcome back ' + data.user.name, type: 'verified' });
                 setTimeout(() => navigate('/'), 2500);
+                localStorage.setItem("token", data.token);
             })
             .catch((error) => {
                 console.error(error);

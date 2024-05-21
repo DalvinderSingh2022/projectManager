@@ -1,13 +1,14 @@
-import React, { memo, useEffect, useState } from 'react';
+import React, { memo, useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from "axios";
 import AlertBox from './AlertBox';
+import { AppContext } from '../App';
 
 const Task = ({ title, detail, assignto, assignby, status, _id }) => {
     const [alert, setAlert] = useState(null);
     const [commentcount, setcommentcount] = useState(0);
     const [assignUser, setAssignUser] = useState({});
-    const [currentUser, setCurrentUser] = useState([]);
+    const { currentUser } = useContext(AppContext);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -24,10 +25,6 @@ const Task = ({ title, detail, assignto, assignby, status, _id }) => {
             }).catch((error) => {
                 console.error(error);
                 setAlert({ message: error.response.data.message, type: 'report' });
-            });
-        axios.get("http://localhost:5000/api/users/current")
-            .then(({ data: user }) => {
-                setCurrentUser(user);
             });
     }, [_id])
 
