@@ -5,15 +5,18 @@ import axios from 'axios';
 
 const Tasks = () => {
     const [status, setStatus] = useState(null);
-    const [tasks, setTasks] = useState([]);
+    const [tasks, setTasks] = useState(null);
     const btnsRef = useRef(null);
 
     useEffect(() => {
+        setTasks(null);
         axios.get(`http://localhost:5000/api/projects${status ? `?status=${status}` : ""}`)
             .then(({ data: task }) => {
                 setTasks(task);
             });
+    }, [status]);
 
+    useEffect(() => {
         const btns = btnsRef.current.querySelectorAll('button');
         const btnclick = (btn) => {
             btns.forEach(btn => btn.classList.remove('pri'))
@@ -23,7 +26,7 @@ const Tasks = () => {
         btns.forEach(btn => btn.addEventListener('click', () => btnclick(btn)))
 
         return () => btns?.forEach(btn => btn.removeEventListener('click', () => btnclick(btn)));
-    }, [status]);
+    });
 
     return (
         <aside className='tasks'>

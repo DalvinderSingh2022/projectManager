@@ -4,8 +4,8 @@ import Loading from '../components/Loading';
 import axios from 'axios';
 
 const Users = () => {
-    const [users, setUsers] = useState([]);
-    const [value, setValue] = useState('');
+    const [users, setUsers] = useState(null);
+    const [value, setValue] = useState(null);
 
     useEffect(() => {
         axios.get(`http://localhost:5000/api/users${value ? '?name=' + value : ""}`)
@@ -29,7 +29,7 @@ const Users = () => {
                 <button type='button' onClick={() => setValue('')} className="btn round flex gap2 material-symbols-outlined">cancel<span>clear</span></button>
             </form>
             <section className='flex gap wrap items-stretch'>
-                {users?.length > 0 ? users.map(user => <User {...user} key={user._id} />) : (users.length !== 0 ? <Loading /> : <div>Can't found {value}</div>)}
+                {users?.length > 0 ? users.map(user => <User {...user} key={user._id} />) : (users?.length !== 0 ? <Loading /> : <div>Can't found {value}</div>)}
             </section>
         </aside>
     )

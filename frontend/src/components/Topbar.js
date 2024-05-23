@@ -19,7 +19,7 @@ const Topbar = () => {
 
     }, [navigate, setCurrentUser]);
 
-    if (!currentUser) {
+    if (!currentUser?._id) {
         return <Loading full={true} />
     }
 

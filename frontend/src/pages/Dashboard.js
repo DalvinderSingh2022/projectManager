@@ -9,17 +9,17 @@ import { AppContext } from '../App';
 const Dashboard = () => {
     const [alert, setAlert] = useState(null);
     const navigate = useNavigate();
-    const [tasks, setTasks] = useState([]);
+    const [tasks, setTasks] = useState(null);
     const { currentUser } = useContext(AppContext);
 
     const loadTasks = useCallback(() => {
         axios.get(`http://localhost:5000/api/projects?userId=${currentUser._id}&assignto=true`)
             .then(({ data: task }) => {
-                setTasks(prev => [...prev, ...task]);
+                setTasks(prev => prev ? [...prev, ...task] : task);
             });
         axios.get(`http://localhost:5000/api/projects?userId=${currentUser._id}&assignby=true`)
             .then(({ data: task }) => {
-                setTasks(prev => [...prev, ...task]);
+                setTasks(prev => prev ? [...prev, ...task] : task);
             });
     }, [currentUser._id]);
 
