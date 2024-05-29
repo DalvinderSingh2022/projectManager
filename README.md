@@ -1,23 +1,23 @@
-# Tasker
+# Project Manager
 
-Tasker is a simple yet powerful task management application that helps you organize and prioritize your tasks efficiently.
+PRojectmanager is a full-stack web application for managing projects, built using the MERN stack (MongoDB, Express.js, React, Node.js) with authentication implemented via JSON Web Tokens (JWT)
 [live demo](https://taskmanagerds.netlify.app/)
 
 ## Features
 
-- Create, edit, and delete tasks
-- Set due dates for tasks
+- Create, edit, and delete projects
+- Set due dates for projects
 - Organize tasks into categories(status)
 - Mark tasks as completed
-- Search and filter tasks
+- Search and filter projects
 - User-friendly and intuitive interface
-- Assign tasks to other users
+- Assign projects to other users
 
 ## Usage
 
 1. Create an account or log in if you already have one.
 2. Add tasks by using the "Create Task" section on the dashboard.
-3. Edit or delete tasks by clicking the task.
+3. Edit or delete projects by clicking the task.
 4. Use the filters and search functionality to find specific tasks.
 5. Mark tasks as completed when you finish them.
 6. Add comments to tasks to give suggestions or to communicate with other users.
@@ -80,25 +80,71 @@ These instructions will help you get a copy of the project up and running on you
 - Login
   ![image](https://github.com/DalvinderSingh2022/taskManager/assets/110463060/09a7386c-7432-40a0-8e7c-d987fcd0e0a8)
 
-- Reset Password
-  ![image](https://github.com/DalvinderSingh2022/taskManager/assets/110463060/579dd881-1598-44bd-9402-fb55ad69dc57)
 
-### Installing
+## Installation
 
-1. Clone the repository to your local machine:
+### Prerequisites
 
-- `git clone https://github.com/DalvinderSingh2022/tasker.git`
+Make sure you have the following installed:
 
-2. Navigate to the project directory:
+- Node.js
+- npm (Node package manager)
+- MongoDB
 
-- ` cd tasker`
+### Backend Setup
 
-3. Install the dependencies:
+1. Clone the repository:
 
-- `npm install`
+   ```sh
+   git clone https://github.com/DalvinderSingh2022/projectManager.git
+   cd Projectmanager
+   ```
 
-4. Start the development server:
+2. Install backend dependencies:
 
-- `npm start`
+   ```sh
+   npm install
+   ```
 
-5. Open your web browser and go to `http://localhost:3000` to access the application.
+3. Create a `.env` file in the `backend` directory and add the following:
+
+   ```env
+   CONNECTION_STRING=your_mongoDB_connection_string
+   ACCESS_TOKEN=your_jwt_secret
+   ```
+
+4. Start the backend server:
+
+   ```sh
+   npm start
+   ```
+
+### Frontend Setup
+
+1. Navigate to the `frontend` directory:
+
+   ```sh
+   cd ./frontend
+   ```
+
+2. Install frontend dependencies:
+
+   ```sh
+   npm install
+   ```
+
+3. Start the frontend development server:
+
+   ```sh
+   npm start
+   ```
+
+The application should now be running at `http://localhost:3000`.
+
+## Technologies Used
+
+- **MongoDB**: Database
+- **Express.js**: Backend framework
+- **React**: Frontend library
+- **Node.js**: Backend runtime
+- **JWT (JSON Web Tokens)**: Authentication
