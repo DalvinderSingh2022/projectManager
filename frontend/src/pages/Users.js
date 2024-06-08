@@ -5,7 +5,7 @@ import axios from 'axios';
 
 const Users = () => {
     const [users, setUsers] = useState(null);
-    const [value, setValue] = useState(null);
+    const [value, setValue] = useState("");
 
     useEffect(() => {
         axios.get(`http://localhost:5000/api/users${value ? '?name=' + value : ""}`)

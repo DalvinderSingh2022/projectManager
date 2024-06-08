@@ -13,6 +13,7 @@ const Dashboard = () => {
     const { currentUser } = useContext(AppContext);
 
     const loadTasks = useCallback(() => {
+        setTasks(null);
         axios.get(`http://localhost:5000/api/projects?userId=${currentUser._id}&assignto=true`)
             .then(({ data: task }) => {
                 setTasks(prev => prev ? [...prev, ...task] : task);
