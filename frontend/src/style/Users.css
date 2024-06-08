@@ -9,7 +9,7 @@
     background-color: var(--white);
     padding: 1em;
     border-radius: 12px;
-    width: min(160px, 100%);
+    width: min(154px, 100%);
 }
 
 .user .name {

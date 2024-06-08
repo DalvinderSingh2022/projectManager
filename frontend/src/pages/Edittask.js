@@ -4,12 +4,13 @@ import { useParams } from 'react-router-dom';
 import AlertBox from '../components/AlertBox';
 import axios from "axios";
 import { AppContext } from '../App';
+import Loading from '../components/Loading';
 
 const Edittask = () => {
     const [addComment, setaddComment] = useState(false);
     const [alert, setAlert] = useState(null);
     const [task, setTask] = useState({});
-    const [comments, setComments] = useState([]);
+    const [comments, setComments] = useState(null);
     const { id } = useParams();
     const { currentUser } = useContext(AppContext);
     const [comment, setcomment] = useState({
@@ -79,13 +80,13 @@ const Edittask = () => {
                             </div>
                         </form>}
                     <div className="flex col tasks items-stretch j-start comments">
-                        {comments && comments.map(comment => {
+                        {comments?.length > 0 ? (comments.map(comment => {
                             return (
                                 <div className="task flex col items-start" key={comment._id}>
                                     <span className="text">{comment.comment}</span>
                                     <span className="by">{`${comment.userName} on ${new Date(comment.updatedAt).toLocaleString()}`}</span>
                                 </div>);
-                        })}
+                        })) : (comments?.length !== 0 ? <Loading /> : <div>There is no comments</div>)}
                     </div>
                 </section >
             </div >

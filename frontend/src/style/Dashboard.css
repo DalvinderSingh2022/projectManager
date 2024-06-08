@@ -1,7 +1,8 @@
 .statistics {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    margin: 1em 1em -0.5em;
+    grid-auto-rows: 135px;
+    padding: 1em 1em 0;
     gap: 1em;
     background-color: var(--background);
 }
@@ -12,7 +13,6 @@
     background-color: var(--white);
     padding: 1em 1.2em;
     border-radius: 16px;
-    min-height: 120px;
     font-size: 1.2em;
 }
 
