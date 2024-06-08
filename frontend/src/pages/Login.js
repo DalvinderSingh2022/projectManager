@@ -61,10 +61,6 @@ const Login = () => {
                                 onChange={(e) => handlechange(e)} />
                         </div>
 
-                        <div className="forgot flex j-end w-full">
-                            <button type='button'><Link to='/reset'>forgot password?</Link></button>
-                        </div>
-
                         <div className='flex col items-stretch w-full submit'>
                             <button type='submit' className="btn pri submit">Log In</button>
                         </div>

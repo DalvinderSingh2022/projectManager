@@ -20,13 +20,13 @@ section form {
     width: min(280px, 100%);
 }
 
-:is(.forgot, .change) button {
+.change button {
     background-color: inherit;
     color: var(--primary);
     margin: 0 .4em;
 }
 
-:is(.forgot, .change) button:hover {
+.change button:hover {
     text-decoration: underline;
 }
 

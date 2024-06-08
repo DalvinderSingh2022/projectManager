@@ -69,7 +69,7 @@ const SignIn = () => {
                         <div className='flex col items-stretch w-full'>
                             <label htmlFor="avatar">Avatar</label>
                             <div className="avatars w-full flex j-start wrap">
-                                {avatars.map((avatar, index) => <img onClick={(e) => handleAvatar(e)} src={avatar} alt={'avatar' + (index + 1)} key={index} loading='lazy' />)}
+                                {avatars.map((avatar, index) => <img onClick={(e) => handleAvatar(e)} src={avatar} alt={'avatar' + (index + 1)} key={index} className={index === 0 ? "select" : ""} />)}
                             </div>
                         </div>
                         <div className='flex col items-stretch w-full'>
