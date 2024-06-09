@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useRef, useState } from 'react';
+import { NavLink, useNavigate } from 'react-router-dom';
 import AlertBox from './AlertBox';
 
 const Sidebar = () => {
@@ -12,17 +12,6 @@ const Sidebar = () => {
         navigate('/login');
     }
 
-    useEffect(() => {
-        const btns = btnsRef.current.querySelectorAll('a');
-        const btnclick = (btn) => {
-            btns.forEach(btn => btn.classList.remove('pri'))
-            btn.classList.add('pri');
-        }
-        btns.forEach(btn => btn.addEventListener('click', () => btnclick(btn)))
-
-        return () => btns?.forEach(btn => btn.removeEventListener('click', () => btnclick(btn)));
-    }, [])
-
     return (
         <>
             <nav className='flex col items-stretch gap j-between'>
@@ -31,18 +20,18 @@ const Sidebar = () => {
                 </button>
                 <div className="flex j-start col items-stretch gap" ref={btnsRef}>
                     <div className="logo">MANAGER</div>
-                    <Link to='/' className="pri btn flex link j-start">
+                    <NavLink to='/' className="btn flex link j-start">
                         <span className="material-symbols-outlined">dashboard</span>
                         <p>Dashboard</p>
-                    </Link>
-                    <Link to='/tasks' className="btn flex link j-start">
+                    </NavLink>
+                    <NavLink to='/tasks' className="btn flex link j-start">
                         <span className="material-symbols-outlined">library_books</span>
                         <p>Tasks</p>
-                    </Link>
-                    <Link to='/users' className="btn flex link j-start">
+                    </NavLink>
+                    <NavLink to='/users' className="btn flex link j-start">
                         <span className="material-symbols-outlined">group</span>
                         <p>Users</p>
-                    </Link>
+                    </NavLink>
                 </div>
                 <button className="btn flex link j-between signout" onClick={handleclick}>
                     <span className="material-symbols-outlined">logout</span>

@@ -153,7 +153,8 @@ section .heading {
     background-color: var(--hover);
 }
 
-.btn.pri {
+.btn.pri,
+.btn.active {
     background-color: var(--primary);
     color: var(--white);
 }
