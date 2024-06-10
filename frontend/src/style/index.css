@@ -53,9 +53,8 @@ form :where(input, textarea, select) {
 
 form :where(input, textarea, select):disabled {
     border: none;
-    background-color: inherit;
+    background-color: var(--hover);
     font-size: 1.2em;
-    padding: 0;
     color: black;
 }
 
